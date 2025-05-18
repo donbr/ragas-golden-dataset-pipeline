@@ -1,0 +1,9 @@
+ragas==0.2.15
+prefect==3.4.1
+langchain
+langchain-community
+langchain-openai
+openai
+pypdf
+rapidfuzz
+python-dotenv
