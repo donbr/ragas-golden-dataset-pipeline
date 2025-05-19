@@ -14,6 +14,10 @@ A comprehensive toolkit for generating high-quality Retrieval-Augmented Generati
   - [Basic Configuration](#basic-configuration)
   - [Directory Structure](#directory-structure)
   - [Basic Usage](#basic-usage)
+  - [Pipeline Architecture](#pipeline-architecture)
+    - [System Architecture](#system-architecture)
+    - [Data Flow](#data-flow)
+    - [Component Relationships](#component-relationships)
   - [Documentation](#documentation)
   - [Troubleshooting](#troubleshooting)
     - [Common Issues](#common-issues)
@@ -173,6 +177,114 @@ python prefect_docloader_pipeline.py
 ```
 
 For detailed usage instructions, command-line arguments, and advanced features, see [PIPELINES.md](./docs/PIPELINES.md).
+
+---
+
+## Pipeline Architecture
+
+The following diagrams illustrate the architecture and data flow of the RAGAS Golden Dataset Pipeline:
+
+### System Architecture
+
+```mermaid
+graph TD
+    subgraph Input
+        A[PDF Documents] --> B[Document Loader]
+        C[arXiv Papers] --> B
+        D[Web Content] --> B
+    end
+    
+    subgraph "Prefect Flows"
+        B --> E[Main Pipeline]
+        B --> F[V2 Pipeline]
+        B --> G[DocLoader Pipeline]
+    end
+    
+    subgraph Processing
+        E --> H[RAGAS Processor]
+        F --> H
+        H --> I[Knowledge Graph Generator]
+    end
+    
+    subgraph Output
+        I --> J[Test Dataset]
+        I --> K[Knowledge Graph]
+        J --> L[HuggingFace Hub]
+        K --> M[Visualization]
+    end
+    
+    subgraph Monitoring
+        E -.-> N[LangSmith Tracing]
+        F -.-> N
+        G -.-> N
+    end
+```
+
+### Data Flow
+
+```mermaid
+flowchart LR
+    A[Input Documents] --> B[Document Loading]
+    B --> C[Chunking & Preparation]
+    C --> D[RAG Generation]
+    D --> E[Knowledge Graph Construction]
+    E --> F[Dataset Creation]
+    F --> G1[JSON Output]
+    F --> G2[HuggingFace Push]
+    E --> H1[KG Visualization]
+    E --> H2[KG Analysis]
+    
+    classDef process fill:#f9f,stroke:#333,stroke-width:2px
+    classDef data fill:#bbf,stroke:#333,stroke-width:2px
+    classDef output fill:#bfb,stroke:#333,stroke-width:2px
+    
+    class B,C,D,E,F process
+    class A,G1,G2,H1,H2 data
+    class G1,G2,H1,H2 output
+```
+
+### Component Relationships
+
+```mermaid
+erDiagram
+    DOCUMENT ||--o{ CHUNK : contains
+    DOCUMENT {
+        string filename
+        string content
+        string metadata
+    }
+    CHUNK {
+        string text
+        int index
+        vector embedding
+    }
+    CHUNK ||--o{ QUESTION : generates
+    QUESTION {
+        string text
+        vector embedding
+    }
+    QUESTION ||--|| ANSWER : has
+    ANSWER {
+        string text
+        vector embedding
+    }
+    DOCUMENT ||--o{ CONCEPT : contains
+    CONCEPT {
+        string name
+        string definition
+        vector embedding
+    }
+    CONCEPT ||--o{ QUESTION : about
+    KNOWLEDGE_GRAPH ||--o{ DOCUMENT : includes
+    KNOWLEDGE_GRAPH ||--o{ CONCEPT : includes
+    KNOWLEDGE_GRAPH ||--o{ QUESTION : includes
+    KNOWLEDGE_GRAPH ||--o{ ANSWER : includes
+    KNOWLEDGE_GRAPH {
+        int nodes
+        int edges
+        string filename
+    }
+```
 
 ---
 

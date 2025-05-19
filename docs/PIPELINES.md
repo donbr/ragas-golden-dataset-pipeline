@@ -10,6 +10,134 @@ The project offers three specialized Prefect v3 flows:
 2. **V2 Pipeline** (`prefect_pipeline_v2.py`): Enhanced version with additional validation, monitoring, and error handling
 3. **Document Loader Pipeline** (`prefect_docloader_pipeline.py`): Specialized for loading documents from multiple sources
 
+## Pipeline Workflow Diagrams
+
+### Main Pipeline Flow
+
+```mermaid
+graph TD
+    A[Start] --> B[Load Documents]
+    B --> C[Process Documents]
+    C --> D[Generate Questions]
+    D --> E[Generate Answers]
+    E --> F[Construct Knowledge Graph]
+    F --> G[Create Test Dataset]
+    G --> H1[Save JSON Output]
+    G --> H2[Save Knowledge Graph]
+    
+    subgraph "Optional Steps"
+        H2 --> I[Push to HuggingFace]
+        H2 --> J[Visualize Knowledge Graph]
+    end
+    
+    classDef critical fill:#f96,stroke:#333,stroke-width:2px
+    classDef optional fill:#69f,stroke:#333,stroke-width:1px
+    
+    class B,C,D,E,F,G,H1,H2 critical
+    class I,J optional
+```
+
+### V2 Pipeline Flow
+
+```mermaid
+graph TD
+    A[Start] --> B[Validate Environment]
+    B --> C[Load Documents]
+    C --> D[Validate Documents]
+    D --> E[Process Documents]
+    E --> F[Generate Questions]
+    F --> G[Generate Answers]
+    G --> H[Construct Knowledge Graph]
+    H --> I[Create Test Dataset]
+    I --> J1[Save JSON Output]
+    I --> J2[Save PKL Output]
+    I --> J3[Save Knowledge Graph]
+    
+    subgraph "Error Handling"
+        B -- Failure --> B1[Log Error Details]
+        C -- Failure --> C1[Download Sample Docs]
+        D -- Failure --> D1[Report Invalid Documents]
+    end
+    
+    subgraph "Optional Steps"
+        J3 --> K[Push to HuggingFace]
+        J3 --> L[Visualize Knowledge Graph]
+    end
+    
+    classDef critical fill:#f96,stroke:#333,stroke-width:2px
+    classDef optional fill:#69f,stroke:#333,stroke-width:1px
+    classDef error fill:#f66,stroke:#333,stroke-width:1px
+    
+    class B,C,D,E,F,G,H,I,J1,J2,J3 critical
+    class K,L optional
+    class B1,C1,D1 error
+```
+
+### Document Loader Pipeline Flow
+
+```mermaid
+graph TD
+    A[Start] --> B[Configure Sources]
+    
+    subgraph "Parallel Loading"
+        B --> C1[Load PDF Documents]
+        B --> C2[Fetch arXiv Papers]
+        B --> C3[Scrape Web Content]
+    end
+    
+    C1 --> D1[Process PDFs]
+    C2 --> D2[Process arXiv]
+    C3 --> D3[Process Web]
+    
+    D1 --> E[Merge Documents]
+    D2 --> E
+    D3 --> E
+    
+    E --> F[Validate Structure]
+    F --> G[Save Merged Documents]
+    G --> H[Push to HuggingFace]
+    
+    classDef parallel fill:#9f6,stroke:#333,stroke-width:2px
+    classDef sequential fill:#f96,stroke:#333,stroke-width:2px
+    classDef output fill:#69f,stroke:#333,stroke-width:1px
+    
+    class C1,C2,C3,D1,D2,D3 parallel
+    class B,E,F,G sequential
+    class H output
+```
+
+### Task Dependencies and Concurrency
+
+```mermaid
+flowchart TD
+    subgraph "Sequential Tasks"
+        A[Environment Setup] --> B[Document Loading]
+        B --> C[Processing]
+        C --> F[Knowledge Graph Creation]
+        F --> G[Output Generation]
+    end
+    
+    subgraph "Parallel Tasks"
+        C --> D1[Question Generation Task 1]
+        C --> D2[Question Generation Task 2]
+        C --> D3[Question Generation Task 3]
+        
+        D1 --> E1[Answer Generation Task 1]
+        D2 --> E2[Answer Generation Task 2]
+        D3 --> E3[Answer Generation Task 3]
+        
+        E1 --> F
+        E2 --> F
+        E3 --> F
+    end
+    
+    classDef sequential fill:#f96,stroke:#333,stroke-width:2px
+    classDef parallel fill:#9f6,stroke:#333,stroke-width:2px
+    
+    class A,B,C,F,G sequential
+    class D1,D2,D3,E1,E2,E3 parallel
+```
+
 ## Main Pipeline
 
 The standard pipeline for generating RAGAS testsets and knowledge graphs.
