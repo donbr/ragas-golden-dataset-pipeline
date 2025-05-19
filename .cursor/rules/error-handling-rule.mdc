@@ -1,0 +1,51 @@
+---
+description: Implement comprehensive error handling in Prefect v3 flows and tasks
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Error Handling Best Practices
+
+Error handling is critical in data pipelines for troubleshooting and recovery. Follow these rules:
+
+1. Use specific exception types rather than catching generic exceptions
+2. Create detailed error artifacts for visibility and debugging
+3. Always re-raise exceptions in flows after logging to properly affect flow state
+4. Implement fallback mechanisms for critical services
+5. Use Prefect's built-in retry mechanism for transient failures
+
+## Error Artifact Pattern
+
+Example with detailed error artifact creation:
+
+```python
+try:
+    # Implementation
+except Exception as e:
+    create_markdown_artifact(
+        key="operation-status",
+        markdown=f"# ❌ Operation Failed\n\n**Error:**\n```\n{str(e)}\n```\n\n**Parameters:**\n- Parameter 1: {param1}\n- Parameter 2: {param2}",
+        description="Status of operation"
+    )
+    # Re-raise the exception to properly affect flow state
+    raise
+```
+
+## Graceful Degradation Pattern
+
+Example with fallback mechanism:
+
+```python
+@task
+def retrieve_with_fallback(query, primary_retriever, backup_retriever):
+    try:
+        return primary_retriever.invoke(query)
+    except Exception as e:
+        create_markdown_artifact(
+            key="retrieval-fallback",
+            markdown=f"# ⚠️ Primary Retrieval Failed\nFalling back to backup retriever.\n\n**Error:**\n```\n{str(e)}\n```",
+            description="Retrieval fallback notification"
+        )
+        return backup_retriever.invoke(query)
+```
+
+Always ensure error details are captured and visible in the Prefect UI for better observability.

@@ -1,0 +1,82 @@
+---
+description: Ensure comprehensive documentation for Prefect v3 tasks and flows
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Documentation Standards
+
+Comprehensive documentation improves visibility in the UI and makes debugging easier. Follow these standards:
+
+1. Include detailed descriptions in task and flow decorators
+2. Write complete docstrings for all tasks and flows explaining parameters and return values
+3. Apply consistent tagging strategy for better organization
+4. Document expected behavior of retries and error handling
+5. Include examples in docstrings for complex tasks
+
+## Task Documentation Pattern
+
+```python
+@task(
+    name="validate-environment",
+    description="Validates all required environment variables are set",
+    retries=3,
+    retry_delay_seconds=5,
+    tags=["setup", "validation"]
+)
+def validate_environment() -> Dict[str, List[str]]:
+    """
+    Validates that all required environment variables are set.
+    
+    This task checks for presence of necessary environment variables 
+    grouped by category (e.g., API credentials, database connection, etc.)
+    
+    Returns:
+        Dictionary of environment categories and their values if successful,
+        raises an EnvironmentError if critical variables are missing.
+    
+    Example:
+        result = {
+            "OpenAI": ["OPENAI_API_KEY"],
+            "Database": ["DB_HOST", "DB_USER", "DB_PASSWORD"]
+        }
+    """
+    # Implementation
+```
+
+## Flow Documentation Pattern
+
+```python
+@flow(
+    name="RAGAS Golden Dataset Pipeline",
+    description="Generates a RAG test dataset and knowledge graph from PDF documents",
+    log_prints=True,
+    version=os.environ.get("PIPELINE_VERSION", "1.0.0")
+)
+def ragas_pipeline(
+    docs_path: str = "data/",
+    testset_size: int = 10,
+    knowledge_graph_path: str = "output/kg.json",
+    hf_repo: str = "",
+) -> None:
+    """
+    Orchestrates the full pipeline:
+      1. Validate environment
+      2. Download PDFs (if needed)
+      3. Load documents
+      4. Generate testset & KG
+      5. Save KG as JSON
+      6. (Optional) Push testset to HF Hub
+      
+    Args:
+        docs_path: Directory path where source files are located
+        testset_size: Number of test examples to generate
+        knowledge_graph_path: File path to save the knowledge graph
+        hf_repo: Optional HuggingFace repo to push the dataset to
+        
+    Returns:
+        None: The function creates artifacts and files as side effects
+    """
+    # Implementation
+```
+
+Documentation should be consistent across the entire codebase and follow a standardized format.

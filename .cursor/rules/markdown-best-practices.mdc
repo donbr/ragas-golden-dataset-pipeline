@@ -1,0 +1,138 @@
+---
+description: Ensure Markdown documentation follows best practices for readability and maintainability
+globs: ["**/*.md", "**/*.mdx", "**/*.markdown"]
+alwaysApply: false
+---
+# Markdown Documentation Best Practices
+
+When writing Markdown documentation, follow these guidelines to ensure your content is readable, maintainable, and effective:
+
+## Structural Guidelines
+
+1. **Use proper heading hierarchy** - Start with a single H1 (`#`) and nest headings properly (H2 -> H3 -> H4). Never skip levels.
+
+2. **Break lines along sentence boundaries** - Each sentence should be on its own line for better version control and diff readability.
+
+3. **Include a table of contents** for documents longer than 3-4 sections - Use Markdown link anchors to create a navigable TOC.
+
+4. **Group related content in sections** - Use horizontal rules (`---`) to visually separate major sections.
+
+5. **Keep paragraphs concise** - Aim for 3-5 sentences per paragraph maximum.
+
+## Formatting Guidelines
+
+1. **Use consistent formatting** throughout your documentation:
+   - Bold (`**text**`) for emphasis or important terms
+   - Italic (`*text*`) for introducing new terms or slight emphasis
+   - Code blocks (``` or indented text) for code samples
+   - Inline code (`` `code` ``) for referencing code elements, file names, or commands
+
+2. **Specify languages in code blocks** for syntax highlighting:
+   ```python
+   def example_function():
+       return "This will be syntax highlighted as Python"
+   ```
+
+3. **Use tables for structured data**:
+   ```
+   | Header 1 | Header 2 |
+   | -------- | -------- |
+   | Cell 1   | Cell 2   |
+   ```
+
+4. **Use appropriate list types**:
+   - Bulleted lists (`-` or `*`) for unordered collections
+   - Numbered lists (`1.`, `2.`) for sequential steps or ranked items
+
+## Content Guidelines
+
+1. **Write clear, concise titles and headings** - Make them descriptive but brief.
+
+2. **Include visual elements** - Add diagrams, screenshots, or illustrations to clarify complex concepts.
+
+3. **Link related documentation** - Use relative links to connect to other documents in your repository.
+
+4. **Define abbreviations** - Explain acronyms on first use.
+
+5. **Include examples** - Demonstrate concepts with practical examples.
+
+6. **Add callouts for important information**:
+   > **Note:** Use blockquotes for notes, warnings, or important information.
+
+7. **Structure command-line examples consistently**:
+   ```bash
+   # Comment explaining what this command does
+   command --flag argument
+   ```
+
+## Example of Well-Structured Documentation
+
+```markdown
+# Feature Name
+
+Brief overview of the feature (1-2 sentences).
+
+## Table of Contents
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Troubleshooting](#troubleshooting)
+
+## Overview
+
+Detailed description of the feature, its purpose, and benefits.
+
+## Prerequisites
+
+- Requirement 1
+- Requirement 2
+- Requirement 3
+
+## Installation
+
+```bash
+# Install via npm
+npm install feature-name
+```
+
+## Configuration
+
+Configure the feature by creating a `config.json` file:
+
+```json
+{
+  "setting1": "value1",
+  "setting2": "value2"
+}
+```
+
+## Usage
+
+Basic usage instructions with code examples.
+
+## Examples
+
+### Example 1: Basic Usage
+
+```javascript
+import { feature } from 'feature-name';
+
+feature.initialize({
+  option1: 'value',
+  option2: true
+});
+```
+
+### Example 2: Advanced Usage
+
+Another example showing more complex usage.
+
+## Troubleshooting
+
+Common issues and their solutions.
+```
+
+Remember that good documentation helps users understand your project quickly and use it effectively. Invest time in creating clear, comprehensive documentation to improve user experience and reduce support overhead.

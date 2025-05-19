@@ -1,0 +1,55 @@
+---
+description: Implement comprehensive artifact creation for better observability in Prefect v3
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Artifact Creation Best Practices
+
+Artifacts significantly improve workflow observability. Follow these rules for effective artifact creation:
+
+1. Use various artifact types (Markdown, tables, links) appropriate for different data types
+2. Create artifacts with descriptive keys for tracking changes over time
+3. Include detailed metadata with each artifact
+4. Document pipeline statistics in table artifacts
+5. Use Markdown artifacts for status updates and error reports
+
+## Table Artifact Pattern
+
+```python
+create_table_artifact(
+    key="pdf-download-summary",
+    table={
+        "columns": ["Metric", "Value"],
+        "data": [
+            ["Successful Downloads", successful_downloads],
+            ["Failed Downloads", failed_downloads],
+            ["Skipped (Already Existed)", skipped_downloads],
+            ["Total PDFs", successful_downloads + skipped_downloads]
+        ]
+    },
+    description="Summary of PDF download operations"
+)
+```
+
+## Markdown Artifact Pattern
+
+```python
+create_markdown_artifact(
+    key="pipeline-summary",
+    markdown=f"# Pipeline Execution Summary\n\n## Success! ✅\n\nThe RAGAS Golden Dataset Pipeline completed successfully.\n\n## Outputs\n- Knowledge Graph: `{knowledge_graph_path}`\n- Test Set Size: {testset_size}\n- Documents Processed: {len(docs)} pages\n{f'- Published to: [{hf_repo}](https://huggingface.co/datasets/{hf_repo})' if hf_repo else ''}",
+    description="Pipeline execution summary"
+)
+```
+
+## Link Artifact Pattern
+
+```python
+create_link_artifact(
+    key="knowledge-graph-file",
+    link=f"file://{os.path.abspath(knowledge_graph_path)}",
+    link_text="Knowledge Graph JSON File",
+    description="Link to the generated knowledge graph file"
+)
+```
+
+Create artifacts consistently throughout your pipeline to provide a comprehensive view of its execution.

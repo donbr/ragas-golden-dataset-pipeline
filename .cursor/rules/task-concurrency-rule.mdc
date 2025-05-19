@@ -1,0 +1,47 @@
+---
+description: Implement concurrent task execution patterns in Prefect v3
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Task Concurrency Best Practices
+
+Prefect supports concurrent execution for better performance. Follow these patterns:
+
+1. Use async patterns consistently throughout your codebase
+2. Implement fan-out/fan-in patterns for parallel processing
+3. Process data in batches for better memory management
+4. Use proper asyncio.gather() for concurrent task execution
+5. Consider using task runners for CPU-bound operations
+
+## Fan-out/Fan-in Pattern
+
+```python
+@flow(name="Create Questions Flow")
+async def create_questions_flow(documents: List[Document], n_questions: int = 2):
+    # Submit tasks in parallel (fan-out)
+    tasks = []
+    for doc in documents:
+        tasks.append(process_document.submit(doc, n_questions))
+    
+    # Gather results in parallel (fan-in)
+    results = await asyncio.gather(*tasks)
+    
+    # Process results
+    return results
+```
+
+## Batch Processing Pattern
+
+```python
+@task
+def process_in_batches(documents, batch_size=100):
+    batches = [documents[i:i+batch_size] for i in range(0, len(documents), batch_size)]
+    results = []
+    for batch in batches:
+        # Process each batch - can also use submit/gather here for more parallelism
+        batch_result = process_batch(batch)
+        results.extend(batch_result)
+    return results
+```
+
+Use concurrency patterns judiciously based on the nature of the task - I/O bound operations benefit the most from async patterns.

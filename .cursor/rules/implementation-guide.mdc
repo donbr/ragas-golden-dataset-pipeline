@@ -1,0 +1,67 @@
+# Prefect v3 Cursor Rules Implementation Guide
+
+This guide explains how to use the Cursor mdc Rules created for implementing best practices in Prefect v3 pipelines.
+
+## What Are Cursor Rules?
+
+Cursor Rules are reusable, scoped instructions that guide the AI assistant in Cursor to follow specific development practices. They're stored as `.mdc` files in the `.cursor/rules` directory of your project.
+
+## Installation Instructions
+
+1. Create a `.cursor/rules` directory in your project root if it doesn't already exist:
+
+```bash
+mkdir -p .cursor/rules
+```
+
+2. Download each rule file and place it in the `.cursor/rules` directory.
+
+3. The files should use the `.mdc` extension. For example:
+   - `task-granularity.mdc`
+   - `error-handling.mdc`
+   - `documentation.mdc`
+   - `artifact-creation.mdc`
+   - `task-concurrency.mdc`
+   - `parameter-validation.mdc`
+
+## Using the Rules
+
+Once installed, the rules will be available in Cursor in several ways:
+
+1. **Auto-Attached**: The rules will automatically be available when you're working with Python files (based on the globs pattern).
+
+2. **Agent-Requested**: When you ask the Cursor AI to help with Prefect v3 code, it will automatically consider these rules.
+
+3. **Manual Reference**: You can explicitly reference a rule by typing `@Cursor Rules` in the chat and selecting the relevant rule.
+
+## Rule Descriptions
+
+Each rule focuses on a specific aspect of Prefect v3 best practices:
+
+- **Task Granularity Rule**: Ensures tasks represent single logical steps with proper retry configuration
+- **Error Handling Rule**: Implements comprehensive error handling and artifact creation for failures
+- **Documentation Rule**: Standardizes task and flow documentation for better observability
+- **Artifact Creation Rule**: Guides the creation of various artifact types for workflow tracking
+- **Task Concurrency Rule**: Implements patterns for concurrent task execution and parallelism
+- **Parameter Validation Rule**: Uses Pydantic models and type hints for robust parameter validation
+
+## Integration with Your Workflow
+
+When working on Prefect v3 code in Cursor with these rules installed:
+
+1. The AI will suggest improvements based on these best practices
+2. It will generate code that follows these patterns
+3. When reviewing existing code, it will identify areas for improvement
+
+## Prioritized Implementation
+
+For the best results, implement these rules in the following priority order:
+
+1. Task Granularity and Retry Configuration
+2. Comprehensive Error Handling
+3. Task and Flow Documentation
+4. Enhanced Artifact Creation
+5. Improved Task Concurrency
+6. Flow Parameter Validation
+
+This order aligns with the impact each improvement will have on your pipeline's reliability and maintainability.

@@ -1,0 +1,65 @@
+---
+description: Implement robust parameter validation for Prefect v3 flows
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Parameter Validation Best Practices
+
+Prefect supports Pydantic for complex parameter validation. Follow these rules:
+
+1. Use Pydantic models for complex flow parameter validation
+2. Add proper type hints for automatic parameter validation
+3. Include detailed field descriptions in Pydantic models
+4. Add default values where appropriate
+5. Implement custom validators for complex validation logic
+
+## Pydantic Model Pattern
+
+```python
+from pydantic import BaseModel, Field, validator
+
+class EvaluationConfig(BaseModel):
+    """Configuration for RAGAS evaluation pipeline."""
+    
+    # Data loading settings
+    data_path: str = Field(description="Path to data files")
+    glob_pattern: str = Field(default="*.html", description="Glob pattern for matching files")
+    
+    # Document splitting settings
+    chunk_size: int = Field(default=1000, description="Size of text chunks")
+    chunk_overlap: int = Field(default=200, description="Overlap between chunks")
+    
+    # Vector store settings
+    collection_name: str = Field(default="ragas_evaluation", description="Name of vector collection")
+    
+    # Custom validation
+    @validator("chunk_size")
+    def chunk_size_must_be_positive(cls, v):
+        if v <= 0:
+            raise ValueError("chunk_size must be positive")
+        return v
+
+@flow(name="RAGAS Evaluation Pipeline")
+def evaluation_pipeline(config: EvaluationConfig):
+    # Implementation using validated config
+    # Prefect automatically validates the input based on the type hint
+```
+
+## Simple Parameter Validation
+
+```python
+from datetime import datetime, timezone
+from typing import Optional
+
+@flow
+def what_day_is_it(date: Optional[datetime] = None):
+    """
+    Prefect automatically performs type conversion of inputs
+    using provided type hints
+    """
+    if date is None:
+        date = datetime.now(timezone.utc)
+    print(f"It was {date.strftime('%A')} on {date.isoformat()}")
+```
+
+Use parameter validation to catch errors early and make your flows more robust.

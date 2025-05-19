@@ -1,0 +1,322 @@
+---
+description: Advanced styling and techniques for creating professional Mermaid diagrams
+globs: ["**/*.md", "**/*.mdx", "**/*.markdown"]
+alwaysApply: false
+---
+# Advanced Mermaid Styling and Techniques
+
+This guide covers advanced styling, theming, and techniques to create professional, visually appealing Mermaid diagrams in your documentation.
+
+## Diagram Initialization and Styling
+
+### Custom Styling with Directives
+
+Use directives to customize the appearance of your diagrams:
+
+```mermaid
+%%{init: {
+  'theme': 'forest',
+  'themeVariables': {
+    'primaryColor': '#5a5',
+    'primaryTextColor': '#fff',
+    'primaryBorderColor': '#4b4',
+    'lineColor': '#787',
+    'secondaryColor': '#efe',
+    'tertiaryColor': '#fff'
+  }
+}}%%
+flowchart LR
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Action 1]
+    B -->|No| D[Action 2]
+```
+
+Common themes include:
+- default
+- forest
+- dark
+- neutral
+- base
+
+### Using the Diagram Looks
+
+Choose different visual styles for your diagrams:
+
+```mermaid
+%%{init: { 'look': 'hand-drawn' } }%%
+flowchart TD
+    A[Start] --> B[Process]
+    B --> C[End]
+```
+
+Available looks:
+- default (classic)
+- hand-drawn
+- forest
+- neutral
+
+### Consistent Styling Across Diagrams
+
+Create a style block that can be reused:
+
+```mermaid
+%%{init: {
+  'fontFamily': 'monospace',
+  'fontSize': '14px',
+  'curve': 'basis'
+}}%%
+flowchart TD
+    Start --> Process --> End
+```
+
+## Layout Techniques
+
+### Controlling Layout Direction
+
+```mermaid
+flowchart RL
+    A --> B
+    B --> C
+```
+
+Direction options:
+- TD / TB (top-down)
+- BT (bottom-up)
+- RL (right-to-left)
+- LR (left-to-right)
+
+### Subgraphs for Grouping Related Nodes
+
+```mermaid
+flowchart TB
+    subgraph "Frontend Layer"
+    A[Web UI] --- B[Mobile App]
+    end
+    
+    subgraph "Backend Layer"
+    C[API Server] --- D[Worker Service]
+    end
+    
+    A --> C
+    B --> C
+```
+
+### Advanced Node Positioning
+
+```mermaid
+flowchart TB
+    Start --> Process1 & Process2
+    Process1 & Process2 --> End
+```
+
+## Interactive Diagrams
+
+### Adding Links to Nodes
+
+```mermaid
+flowchart LR
+    A[Documentation] --> B[Click Me]
+    click B "https://mermaid.js.org" "Open Mermaid documentation" _blank
+```
+
+### Creating Collapsible Sections
+
+Use subgraphs with specific IDs that can be referenced in script:
+
+```mermaid
+flowchart TB
+    subgraph details [Click to expand...]
+    A[Detailed Process 1]
+    B[Detailed Process 2]
+    A --> B
+    end
+    
+    Start --> details --> End
+```
+
+## Advanced Diagram Types
+
+### Git Graph Visualization
+
+```mermaid
+gitGraph
+    commit
+    branch develop
+    checkout develop
+    commit
+    commit
+    checkout main
+    merge develop
+    commit
+    branch feature
+    checkout feature
+    commit
+    checkout main
+    merge feature
+    commit
+```
+
+### Journey Diagrams for User Experience
+
+```mermaid
+journey
+    title User Registration Journey
+    section Account Creation
+      Fill in form: 5: User
+      Verify email: 3: User, System
+    section Profile Setup
+      Upload photo: 4: User
+      Add personal info: 3: User
+```
+
+### Mindmaps for Concept Visualization
+
+```mermaid
+mindmap
+    root((Project Overview))
+        Features
+            Core
+            Advanced
+        Timeline
+            Planning
+            Development
+            Testing
+        Resources
+            Team
+            Budget
+```
+
+### Pie Charts for Data Distribution
+
+```mermaid
+pie
+    title Distribution of Resources
+    "Development" : 45
+    "Testing" : 30
+    "Documentation" : 15
+    "Maintenance" : 10
+```
+
+## Responsive Design Considerations
+
+### Handling Diagram Scaling
+
+For documents that will be viewed on different screen sizes:
+
+1. **Keep node content concise** - Long text in nodes can cause formatting issues on small screens.
+
+2. **Limit diagram width** - Aim for no more than 5-7 nodes horizontally.
+
+3. **Consider direction carefully** - For mobile viewing:
+   - LR/RL diagrams often require horizontal scrolling
+   - TD/TB diagrams typically scale better for narrow screens
+
+4. **Use line breaks in node text** - Replace long text with multiple lines:
+   ```
+   A["Line 1<br/>Line 2"]
+   ```
+
+5. **Test on multiple devices** - Always check how your diagrams appear on different screen sizes.
+
+## Advanced Flowchart Techniques
+
+### Styled Links with Text
+
+```mermaid
+flowchart LR
+    A -- Text --> B
+    A --> |Text| B
+    A -.-> B
+    A ==> B
+    A =="Text"==> B
+```
+
+### Special Node Shapes
+
+```mermaid
+flowchart TD
+    A[Regular] --> B(Rounded)
+    B --> C([Stadium])
+    C --> D[[Subroutine]]
+    D --> E[(Database)]
+    E --> F((Circle))
+    F --> G>Asymmetric]
+    G --> H{Diamond}
+    H --> I{{Hexagon}}
+    I --> J[/Parallelogram/]
+    J --> K[\Parallelogram alt\]
+    K --> L[/Trapezoid\]
+    L --> M[\Trapezoid alt/]
+```
+
+### Adding Node Styling
+
+```mermaid
+flowchart LR
+    A:::customClass --> B
+    
+    classDef customClass fill:#f96,stroke:#333,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+```
+
+## Performance Optimization
+
+1. **Limit node count** - Keep diagrams under 50 nodes for optimal performance.
+
+2. **Simplify complex diagrams** - Break them into multiple smaller diagrams focused on specific aspects.
+
+3. **Reduce crossing lines** - Reorganize nodes to minimize overlapping connections.
+
+4. **Use appropriate directional flow** - Choose directions that naturally minimize line crossings.
+
+5. **Consider lazy loading** - For documentation with many diagrams, consider lazy loading to improve page performance.
+
+## Example: Creating a System Architecture Diagram
+
+```mermaid
+%%{init: {
+  'theme': 'neutral',
+  'themeVariables': {
+    'primaryColor': '#597ee0',
+    'primaryTextColor': '#fff',
+    'primaryBorderColor': '#3c5cc7',
+    'lineColor': '#717d99',
+    'secondaryColor': '#f2f5fc',
+    'tertiaryColor': '#fff'
+  }
+}}%%
+flowchart TB
+    subgraph Client["Client Layer"]
+    A[Web Application] --- B[Mobile App]
+    end
+    
+    subgraph API["API Gateway"]
+    C[Authentication] --- D[Request Routing]
+    D --- E[Rate Limiting]
+    end
+    
+    subgraph Services["Microservices"]
+    F[User Service] --- G[Content Service]
+    G --- H[Analytics Service]
+    end
+    
+    subgraph Data["Data Layer"]
+    I[(Primary DB)] --- J[(Replica DB)]
+    K[(Cache)] --- I
+    end
+    
+    Client --> API
+    API --> Services
+    Services --> Data
+    
+    classDef clientClass fill:#f78a24,color:#fff
+    classDef apiClass fill:#5a5,color:#fff
+    classDef serviceClass fill:#597ee0,color:#fff
+    classDef dataClass fill:#9455d3,color:#fff
+    
+    class Client clientClass
+    class API apiClass
+    class Services serviceClass
+    class Data dataClass
+```
+
+Remember that the best diagrams balance visual appeal with clarity. Focus on making your diagrams easy to understand first, then enhance them with styling to make them more engaging and professional.

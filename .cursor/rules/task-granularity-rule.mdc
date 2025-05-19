@@ -1,0 +1,39 @@
+---
+description: Ensure Prefect v3 tasks follow best practices for granularity and retry configuration
+globs: ["**/*.py"]
+alwaysApply: false
+---
+# Prefect v3 Task Best Practices
+
+When creating Prefect tasks, follow these rules:
+
+1. Tasks should represent single logical steps of a workflow (keep them small and focused)
+2. Always configure appropriate retries for tasks that interact with external services
+3. Add proper retry_delay_seconds to all tasks with retries
+4. Use tags to categorize tasks for better observability
+5. Include detailed name and description for each task
+
+Example of a well-configured task:
+
+```python
+@task(
+    name="load-documents",
+    description="Loads PDF documents from a directory using LangChain's PyPDFDirectoryLoader",
+    retries=3,  
+    retry_delay_seconds=60,
+    tags=["data", "loading"]
+)
+def load_documents(path: str) -> List:
+    """
+    Load PDF documents from a directory using LangChain's PyPDFDirectoryLoader.
+    
+    Args:
+        path: Directory path where files are located
+        
+    Returns:
+        List of Document objects
+    """
+    # Implementation
+```
+
+Avoid creating tasks that are too large or do multiple logical operations. If a task does multiple things, split it into smaller tasks.

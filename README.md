@@ -1,58 +1,86 @@
 # RAGAS Golden Dataset Pipeline
 
-This repository contains a Prefect v3 flow for generating a RAGAS testset and knowledge graph from a collection of documents, serializing the graph to JSON, and optionally pushing the testset to the Hugging Face Hub.
-
----
+A comprehensive toolkit for generating high-quality Retrieval-Augmented Generation (RAG) evaluation datasets using Prefect v3 workflows. This pipeline automates the creation of test datasets with the RAGAS framework, producing valuable resources for benchmarking and evaluating RAG systems.
 
 ## Table of Contents
 
 - [RAGAS Golden Dataset Pipeline](#ragas-golden-dataset-pipeline)
   - [Table of Contents](#table-of-contents)
-  - [Features](#features)
+  - [Quick Start](#quick-start)
+  - [Overview](#overview)
+    - [Example Datasets](#example-datasets)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Running Locally](#running-locally)
-    - [Using Prefect Server](#using-prefect-server)
-      - [Verify Server Connection](#verify-server-connection)
-    - [Inspecting in Prefect UI](#inspecting-in-prefect-ui)
-  - [Scheduling](#scheduling)
+  - [Basic Configuration](#basic-configuration)
   - [Directory Structure](#directory-structure)
-  - [License](#license)
-- [Ragas Knowledge Graph Utilities](#ragas-knowledge-graph-utilities)
-  - [Overview](#overview)
-  - [Usage](#usage-1)
-    - [Removing Embeddings from a Single File](#removing-embeddings-from-a-single-file)
-    - [Processing All JSON Files in a Directory](#processing-all-json-files-in-a-directory)
-    - [Checking JSON Structure](#checking-json-structure)
-    - [Visualizing Knowledge Graphs](#visualizing-knowledge-graphs)
-  - [Dependencies](#dependencies)
-  - [File Size Reduction](#file-size-reduction)
-  - [License](#license-1)
+  - [Basic Usage](#basic-usage)
+  - [Documentation](#documentation)
+  - [Troubleshooting](#troubleshooting)
+    - [Common Issues](#common-issues)
+  - [Related Resources](#related-resources)
+    - [Generated Datasets](#generated-datasets)
 
 ---
 
-## Features
+## Quick Start
 
-* **Automatic PDF Download**: Downloads sample research papers if no PDFs are present in the data directory.
-* **PDF Document Processing**: Loads PDF files using LangChain's `PyPDFDirectoryLoader`.
-* **Testset Generation**: Leverage RAGAS `TestsetGenerator` with configurable LLM & embedding models.
-* **Caching & Retries**: Built-in task-level caching (1 day) and retry policies for robustness.
-* **Knowledge Graph Export**: Serialize the RAGAS knowledge graph to a JSON file.
-* **Hugging Face Integration**: Push the generated dataset to your Hugging Face Hub repository.
-* **LangSmith Tracing**: Built-in LangSmith integration for monitoring and debugging LLM interactions.
+For experienced users who want to get started quickly:
+
+```bash
+# Clone, setup and run
+git clone https://github.com/your-username/ragas-golden-dataset-pipeline.git
+cd ragas-golden-dataset-pipeline
+python -m venv .venv && source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt  # Faster installation with uv (or use pip)
+cp .env-example .env  # Edit with your OPENAI_API_KEY
+
+# Start Prefect server and run the pipeline
+prefect server start  # In a separate terminal
+python prefect_pipeline.py
+```
+
+The pipeline will download sample PDFs if none exist, generate a 10-sample RAGAS testset, and output to the output/ directory.
+
+---
+
+## Overview
+
+The RAGAS Golden Dataset Pipeline is designed to automate the generation of RAG evaluation datasets using the RAGAS framework. It processes documents from various sources (PDFs, arXiv papers, web content) and creates structured test datasets with knowledge graphs that can be used to evaluate and benchmark RAG systems.
+
+Key features include:
+
+- **Multiple Pipeline Variants**: Choose from three specialized Prefect v3 flows
+- **Comprehensive Error Handling**: Robust error detection and recovery mechanisms
+- **Concurrent Task Execution**: Parallel processing for improved performance
+- **Rich Artifacts**: Detailed outputs for monitoring and debugging
+- **Hugging Face Integration**: Push generated datasets to HF Hub
+- **LangSmith Tracing**: Monitor LLM interactions
+
+### Example Datasets
+
+The pipeline has been used to generate the following datasets:
+
+- [RAGAS Golden Dataset](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset) - Dataset generated with the main pipeline
+- [RAGAS Golden Dataset V2](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-v2) - Enhanced dataset from the V2 pipeline
+- [RAGAS Golden Dataset Documents](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-documents) - Document collection from the document loader pipeline
 
 ---
 
 ## Prerequisites
 
-* Python 3.8 or newer
-* Prefect v3
-* RAGAS, LangChain, OpenAI, and other Python libraries (see `requirements.txt`)
-* An OpenAI API key for LLM and embedding access
-* A LangSmith account and API key (optional, for tracing)
-* A Hugging Face account and [API token](https://huggingface.co/settings/tokens) (if you plan to push to HF Hub)
+- Python 3.8 or newer
+- Prefect v3
+- OpenAI API key
+- The following Python libraries:
+  - ragas (0.2.15+)
+  - prefect (3.4.1+)
+  - langchain and related packages
+  - openai
+  - pypdf
+  - huggingface_hub
+  - Other utilities (see `requirements.txt`)
+- A LangSmith account and API key (optional, for tracing)
+- A Hugging Face account and [API token](https://huggingface.co/settings/tokens) (if pushing to HF Hub)
 
 ---
 
@@ -60,227 +88,135 @@ This repository contains a Prefect v3 flow for generating a RAGAS testset and kn
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/ragas-golden-pipeline.git
-cd ragas-golden-pipeline
+git clone https://github.com/your-username/ragas-golden-dataset-pipeline.git
+cd ragas-golden-dataset-pipeline
 
 # Create and activate a virtual environment
-uv venv
-source .venv/bin/activate    # On Windows: `.venv\Scripts\activate`
+python -m venv .venv
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
 
-# Install dependencies
+# Install dependencies using uv (recommended for faster installation)
 uv pip install -r requirements.txt
+# Or using pip if uv is not installed
+# pip install -r requirements.txt
+
+# Create a .env file from the example
+cp .env-example .env
+# Edit .env with your API keys and configuration
 ```
 
 ---
 
-## Configuration
+## Basic Configuration
 
-Set the following environment variables or create a `.env` file:
-
-* `OPENAI_API_KEY`: Your OpenAI API key for model access.
-* `HF_TOKEN`: Your Hugging Face API token for dataset uploads.
-* `HF_TESTSET_REPO`: Your Hugging Face repository name (optional).
-* `LANGSMITH_API_KEY`: Your LangSmith API key for tracing (optional).
-* `LANGSMITH_TRACING`: Set to "true" to enable tracing (optional).
-* `LANGSMITH_PROJECT`: Project name for LangSmith tracing (optional).
-
-Example `.env` file:
+The essential configuration is done through environment variables in a `.env` file:
 
 ```
+# Required
 OPENAI_API_KEY=sk-xxx...
-HF_TOKEN=hf_xxx...
-HF_TESTSET_REPO=your-username/ragas-golden-dataset
-LANGSMITH_API_KEY=ls_xxx...
-LANGSMITH_TRACING=true
-LANGSMITH_PROJECT=ragas-golden-dataset
+
+# Optional but recommended
+LLM_MODEL=gpt-4.1-mini
+EMBEDDING_MODEL=text-embedding-3-small
+TESTSET_SIZE=10
 ```
 
-See the `.env-example` file for a complete list of configurable options.
-
----
-
-## Usage
-
-### Running Locally
-
-**Important**: Despite the PREFECT_SERVER_ALLOW_EPHEMERAL_MODE setting in the code and .env file, the Prefect server must be running before executing the pipeline locally.
-
-```bash
-# Start the Prefect server in a separate terminal
-prefect server start
-```
-
-This will start a local server at `http://127.0.0.1:4200`. You can access the UI by opening this URL in your browser.
-
-Once the server is running, you can execute the pipeline with default parameters:
-
-```bash
-python prefect_pipeline.py
-```
-
-You can customize the execution with command-line arguments:
-
-```bash
-python prefect_pipeline.py \
-  --docs-path data/ \
-  --testset-size 10 \
-  --kg-output output/kg.json \
-  --hf-repo your-username/ragas-golden-dataset \
-  --llm-model gpt-4.1-mini \
-  --embedding-model text-embedding-3-small
-```
-
-* `--docs-path`: Directory with source documents (default: "data/")
-* `--testset-size`: Number of test samples to generate (default: 10)
-* `--kg-output`: File path for the serialized knowledge graph (default: "output/kg.json")
-* `--hf-repo`: HF Hub repository name to push the dataset (default: "")
-* `--llm-model`: LLM model to use (default: "gpt-4.1-mini")
-* `--embedding-model`: Embedding model to use (default: "text-embedding-3-small")
-
-### Using Prefect Server
-
-The pipeline requires a running Prefect server as described above. Here are additional details about the server configuration:
-
-#### Verify Server Connection
-
-```bash
-# Check if the server is running
-prefect config view
-```
-
-You should see that `PREFECT_API_URL` is set to `http://127.0.0.1:4200/api` or similar.
-
-> **Note**: While the code and .env-example file include the `PREFECT_SERVER_ALLOW_EPHEMERAL_MODE=True` setting, which should theoretically allow running without a server, our testing has found that starting the Prefect server is still required.
-
-### Inspecting in Prefect UI
-
-Once the Prefect server is running:
-
-```bash
-# Build and register a deployment
-prefect deployment build prefect_pipeline.py:ragas_pipeline --name ragas-golden
-prefect deployment apply ragas-golden-deployment.yaml
-
-# Trigger a run
-prefect deployment run ragas-pipeline/ragas-golden
-```
-
----
-
-## Scheduling
-
-Schedule daily runs at 06:00 UTC using a cron-like schedule:
-
-```bash
-prefect deployment build prefect_pipeline.py:ragas_pipeline \
-  --name daily-ragas \
-  --cron "0 6 * * *" \
-  --param docs_path=data/ \
-  --param testset_size=10
-prefect deployment apply daily-ragas-deployment.yaml
-```
+For a complete list of configurable options, see [CONFIGURATION.md](./docs/CONFIGURATION.md).
 
 ---
 
 ## Directory Structure
 
 ```
-├── data/                  # Input documents (PDFs will be downloaded here if empty)
-├── output/                # Generated outputs (KG JSON, logs)
-├── prefect_pipeline.py    # Prefect v3 flow definition
-├── requirements.txt       # Python dependencies
-├── README.md              # This documentation
-├── .env-example           # Example environment variable configuration
-└── .gitignore
+├── data/                       # Input documents directory
+├── output/                     # Generated artifacts and results
+├── utilities/                  # Helper scripts and analysis tools
+├── prefect_pipeline.py         # Main pipeline implementation
+├── prefect_pipeline_v2.py      # Enhanced pipeline with extended features
+├── prefect_docloader_pipeline.py # Specialized document loader pipeline
+├── requirements.txt            # Project dependencies with versions
+├── .env-example                # Template for environment configuration
+└── docs/                       # Detailed documentation
+    ├── CONFIGURATION.md        # Complete configuration options
+    ├── PIPELINES.md            # Detailed pipeline information
+    ├── VISUALIZATION.md        # Knowledge graph visualization guide
+    └── README_KG_UTIL.md       # Instructions for knowledge graph utilities
 ```
 
 ---
 
-## License
+## Basic Usage
 
-This project is released under the [MIT License](LICENSE).
-
-# Ragas Knowledge Graph Utilities
-
-This repository contains utilities for working with Ragas knowledge graph files, including tools to remove embedding fields from JSON files and visualize knowledge graphs.
-
-## Overview
-
-The following utilities are available:
-
-1. `remove_embeddings.py` - Removes embedding fields from a single JSON file
-2. `process_all_json.py` - Processes all JSON files in a directory to remove embedding fields
-3. `check_structure.py` - Analyzes a JSON file to identify embedding fields
-4. `ragas_kg_visualization.py` - Visualizes a knowledge graph using Plotly
-5. `simple_kg_visualization.py` - Creates a simplified visualization with fewer nodes for better clarity
-
-## Usage
-
-### Removing Embeddings from a Single File
+**Important**: A Prefect server must be running before executing the pipeline:
 
 ```bash
-python remove_embeddings.py <input_file> [output_file]
+# Start the Prefect server in a separate terminal
+prefect server start
 ```
 
-If no output file is specified, the script will save the result to `<input_file>_no_embeddings.json`.
+This starts a server at `http://127.0.0.1:4200` with a web UI.
 
-### Processing All JSON Files in a Directory
+Then, run one of the pipelines with default parameters:
 
 ```bash
-python process_all_json.py <directory_path>
+# Main Pipeline
+python prefect_pipeline.py
+
+# V2 Pipeline
+python prefect_pipeline_v2.py
+
+# Document Loader Pipeline
+python prefect_docloader_pipeline.py
 ```
 
-This will process all JSON files in the specified directory, skipping any files that already have "_no_embeddings" in their name.
+For detailed usage instructions, command-line arguments, and advanced features, see [PIPELINES.md](./docs/PIPELINES.md).
 
-### Checking JSON Structure
+---
 
-```bash
-python check_structure.py <json_file>
-```
+## Documentation
 
-This utility analyzes the structure of a JSON file and identifies any embedding fields present.
+- [CONFIGURATION.md](./docs/CONFIGURATION.md) - Detailed configuration options and environment variables
+- [PIPELINES.md](./docs/PIPELINES.md) - Comprehensive guide to the available pipelines, their features, and usage
+- [VISUALIZATION.md](./docs/VISUALIZATION.md) - Instructions for visualizing knowledge graphs and analyzing results
+- [README_KG_UTIL.md](./utilities/README_KG_UTIL.md) - Guide to utilities for working with knowledge graphs
 
-### Visualizing Knowledge Graphs
+---
 
-```bash
-python ragas_kg_visualization.py
-```
+## Troubleshooting
 
-Creates an interactive visualization of the full knowledge graph and saves it as `ragas_kg_visualization.html`.
+### Common Issues
 
-```bash
-python simple_kg_visualization.py
-```
+1. **Prefect Server Connection Issues**:
+   - Ensure the Prefect server is running with `prefect server start`
+   - Verify connection with `prefect config view`
+   - Check that `PREFECT_API_URL` is correctly set
 
-Creates a simplified visualization with only 30 nodes for better clarity and saves it as `simple_kg_visualization.html`.
+2. **No PDFs in Data Directory**:
+   - The pipeline will download sample research papers if no PDFs are present
+   - Ensure your internet connection is active
 
-## Dependencies
+3. **API Key Issues**:
+   - Verify your OpenAI API key is valid and has sufficient credits
+   - Check that environment variables are correctly set in `.env`
 
-This project uses the following dependencies:
+For more troubleshooting tips, see [PIPELINES.md](./docs/PIPELINES.md#troubleshooting).
 
-- json (standard library)
-- os (standard library)
-- sys (standard library)
-- glob (standard library)
-- networkx
-- plotly
+---
 
-You can install the required dependencies using:
+## Related Resources
 
-```bash
-pip install networkx plotly
-```
+- [RAGAS Documentation](https://docs.ragas.io/)
+- [Prefect Documentation](https://docs.prefect.io/latest/)
+- [LangChain Documentation](https://python.langchain.com/docs/)
+- [OpenAI API Documentation](https://platform.openai.com/docs/)
+- [Hugging Face Hub Documentation](https://huggingface.co/docs/hub/)
+- [arXiv API Documentation](https://arxiv.org/help/api/)
 
-Or with UV (recommended):
+### Generated Datasets
 
-```bash
-uv pip install networkx plotly
-```
-
-## File Size Reduction
-
-Removing embedding fields can significantly reduce the size of knowledge graph JSON files, making them easier to work with and share.
-
-## License
-
-This project is open source and available under the MIT license.
+- [RAGAS Golden Dataset](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset)
+- [RAGAS Golden Dataset V2](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-v2)
+- [RAGAS Golden Dataset Documents](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-documents)

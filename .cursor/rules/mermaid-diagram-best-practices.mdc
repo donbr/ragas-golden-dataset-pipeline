@@ -1,0 +1,176 @@
+---
+description: Create clear and effective Mermaid diagrams in documentation
+globs: ["**/*.md", "**/*.mdx", "**/*.markdown"]
+alwaysApply: false
+---
+# Mermaid Diagram Best Practices
+
+Mermaid enables you to create diagrams and visualizations using text and code. Follow these guidelines to create clear, effective, and maintainable diagrams in your documentation:
+
+## General Principles
+
+1. **Keep diagrams focused** - Each diagram should illustrate a single concept or workflow.
+
+2. **Choose the right diagram type** for your content:
+   - Flowcharts for processes and decisions
+   - Sequence diagrams for interactions between components
+   - Class diagrams for system structure
+   - Entity-Relationship Diagrams (ERD) for data models
+   - Gantt charts for project timelines
+   - State diagrams for state machines
+
+3. **Add titles and descriptions** to all diagrams to provide context.
+
+4. **Include comments** in complex diagrams to explain specific elements.
+
+5. **Break complex diagrams** into multiple simpler ones to improve understanding.
+
+6. **Maintain consistent styling** across diagrams within the same document.
+
+## Syntax and Structure
+
+1. **Use proper Mermaid fencing** in Markdown:
+   ````
+   ```mermaid
+   flowchart TD
+     A[Start] --> B[Process]
+     B --> C[End]
+   ```
+   ````
+
+2. **Choose appropriate direction** for your diagram flow:
+   - TD (top-down) or TB (top-bottom) for hierarchical processes
+   - LR (left-right) for sequential processes or timelines
+   - RL (right-left) for reverse processes (use sparingly)
+
+3. **Label diagram elements clearly** with concise but descriptive text.
+
+4. **Use consistent node shapes** to represent similar elements:
+   - `[Rectangle]` for processes or steps
+   - `(Rounded Rectangle)` for operations
+   - `{Diamond}` for decisions
+   - `([Stadium])` for inputs/outputs
+   - `[[Subroutine]]` for subroutines or subprocesses
+
+5. **Add meaningful links** between nodes with descriptive text when needed:
+   ```
+   A -->|Condition met| B
+   A -->|Condition failed| C
+   ```
+
+## Specific Diagram Types
+
+### Flowcharts
+
+```mermaid
+flowchart TD
+    A[Start] --> B{Is condition met?}
+    B -->|Yes| C[Process Success]
+    B -->|No| D[Process Failure]
+    C --> E[End]
+    D --> E
+```
+
+1. **Start with clear entry points** and follow a logical flow.
+2. **Use meaningful labels** for decision points.
+3. **Maintain consistent flow direction** throughout the diagram.
+4. **Add decision outcomes** on connection lines.
+5. **Group related nodes** using subgraphs when needed.
+
+### Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant System
+    participant Database
+    
+    User->>System: Request data
+    System->>Database: Query
+    Database-->>System: Return results
+    System-->>User: Display results
+```
+
+1. **Place most important actors on the left**.
+2. **Use different arrow types** to indicate different types of communication:
+   - `->` for synchronous calls
+   - `-->` for responses
+   - `->>` for asynchronous calls
+3. **Use activations** to show when processes are active.
+4. **Group related sequences** with alt/opt/loop blocks.
+5. **Add notes** to explain complex interactions.
+
+### Class Diagrams
+
+```mermaid
+classDiagram
+    class Animal {
+        +String name
+        +int age
+        +makeSound() void
+    }
+    class Dog {
+        +fetch() void
+    }
+    Animal <|-- Dog
+```
+
+1. **Show relationships clearly** using appropriate notation.
+2. **Include only relevant attributes and methods**.
+3. **Use consistent naming conventions** for classes and members.
+4. **Group related classes** visually.
+5. **Add visibility modifiers** for clarity (`+` public, `-` private, `#` protected).
+
+### Entity-Relationship Diagrams
+
+```mermaid
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ LINE_ITEM : contains
+    CUSTOMER }|..|{ DELIVERY_ADDRESS : uses
+```
+
+1. **Use standard cardinality notation** for relationships.
+2. **Name relationships** to describe how entities interact.
+3. **Include only essential attributes** to avoid clutter.
+4. **Position entities logically** based on their relationships.
+
+### Gantt Charts
+
+```mermaid
+gantt
+    title Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Research           :a1, 2023-01-01, 30d
+    Design             :after a1, 20d
+    section Phase 2
+    Implementation     :2023-02-20, 40d
+    Testing            :2023-04-01, 20d
+```
+
+1. **Use clear task names** that describe each activity.
+2. **Group tasks into logical sections**.
+3. **Add dependencies** between related tasks.
+4. **Use consistent date formatting**.
+5. **Include milestones** for important events.
+
+## Common Pitfalls to Avoid
+
+1. **Overcomplicated diagrams** - If a diagram takes more than a minute to understand, simplify it.
+2. **Inconsistent styling** - Stick to a single visual style across your diagrams.
+3. **Missing labels or context** - Always provide enough information to understand the diagram.
+4. **Too many crossing lines** - Rearrange nodes to minimize line crossings.
+5. **Unclear direction or flow** - Make sure the reader knows where to start and how to follow the diagram.
+6. **Text overlap** - Ensure text doesn't overlap with nodes or other text.
+
+## Example of Effective Diagram Usage
+
+When explaining a system architecture:
+
+1. Start with a high-level overview diagram showing major components.
+2. Follow with more detailed diagrams for specific subsystems.
+3. Use sequence diagrams to show how components interact in key processes.
+4. Include class diagrams for important data structures or object relationships.
+
+Remember that diagrams should complement your written documentation, not replace it. Use them to clarify complex concepts and provide visual aids to enhance understanding.
