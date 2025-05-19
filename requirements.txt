@@ -7,3 +7,12 @@ openai
 pypdf
 rapidfuzz
 python-dotenv
+requests
+urllib3
+huggingface_hub
+networkx
+matplotlib
+pandas
+pyvis
+plotly
+nbformat>=4.2.0
