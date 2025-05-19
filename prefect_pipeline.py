@@ -1,9 +1,11 @@
 import os
 # Set Prefect to use ephemeral mode before importing Prefect
 os.environ["PREFECT_SERVER_ALLOW_EPHEMERAL_MODE"] = "True"
+# Configure Prefect to persist results by default for better caching
+os.environ["PREFECT_RESULTS_PERSIST_BY_DEFAULT"] = "true"
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from datetime import timedelta
 import argparse
 import subprocess
@@ -13,7 +15,8 @@ from dotenv import load_dotenv
 from prefect import flow, task, get_run_logger
 from prefect.tasks import task_input_hash
 from prefect.cache_policies import NO_CACHE
-from prefect.artifacts import create_markdown_artifact, create_link_artifact
+from prefect.artifacts import create_markdown_artifact, create_link_artifact, create_table_artifact
+from prefect.events import emit_event
 from ragas.testset import TestsetGenerator
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
@@ -24,23 +27,76 @@ from huggingface_hub import HfApi, login
 # Load environment variables from .env file
 load_dotenv()
 
-# Validate required LangSmith environment variables
-# These are prerequisites and should fail if not present
-def validate_langsmith_env():
-    """Validate that required LangSmith environment variables are set"""
-    required_vars = ["LANGSMITH_PROJECT", "LANGSMITH_TRACING"]
-    missing_vars = [var for var in required_vars if var not in os.environ or not os.environ[var]]
+@task(
+    name="validate-environment",
+    description="Validates all required environment variables are set",
+    retries=3,
+    retry_delay_seconds=5,
+    tags=["setup", "validation"]
+)
+def validate_environment() -> Dict[str, List[str]]:
+    """
+    Validates that all required environment variables are set.
+    Returns a dictionary of environment categories and their values if successful,
+    raises an EnvironmentError if critical variables are missing.
+    """
+    logger = get_run_logger()
+    logger.info("Validating environment variables...")
     
+    # Define required environment variables by category
+    required_vars = {
+        "OpenAI": ["OPENAI_API_KEY"],
+        "HuggingFace": ["HF_TOKEN"] if os.environ.get("HF_TESTSET_REPO") else []
+    }
+    
+    # Optional but recommended variables
+    optional_vars = {
+        "LangSmith": ["LANGSMITH_PROJECT", "LANGSMITH_TRACING"]
+    }
+    
+    # Check for missing required variables
+    missing_vars = {}
+    for category, vars_list in required_vars.items():
+        category_missing = [var for var in vars_list if var not in os.environ or not os.environ[var]]
+        if category_missing:
+            missing_vars[category] = category_missing
+    
+    # If any required variables are missing, log and raise error
     if missing_vars:
-        raise EnvironmentError(
-            f"Missing required LangSmith environment variables: {', '.join(missing_vars)}. "
-            f"Please set these in your environment or .env file."
-        )
+        error_msg = "Missing required environment variables:\n"
+        for category, vars_list in missing_vars.items():
+            error_msg += f"- {category}: {', '.join(vars_list)}\n"
+        error_msg += "Please set these in your environment or .env file."
+        
+        logger.error(error_msg)
+        raise EnvironmentError(error_msg)
+    
+    # Check for missing optional variables and log warnings
+    missing_optional = {}
+    for category, vars_list in optional_vars.items():
+        category_missing = [var for var in vars_list if var not in os.environ or not os.environ[var]]
+        if category_missing:
+            missing_optional[category] = category_missing
+            logger.warning(f"Optional {category} variables not set: {', '.join(category_missing)}")
+            
+    # Create a result dictionary with all variables that are set
+    result = {}
+    for category, vars_list in {**required_vars, **optional_vars}.items():
+        available_vars = [var for var in vars_list if var in os.environ and os.environ[var]]
+        if available_vars:
+            # Just store the names, not the values (for security)
+            result[category] = available_vars
+    
+    logger.info(f"Environment validation complete. Found {sum(len(v) for v in result.values())} variables across {len(result)} categories.")
+    return result
 
-# Validate environment at startup
-validate_langsmith_env()
-
-@task
+@task(
+    name="download-pdfs",
+    description="Downloads sample PDFs for RAGAS testset generation",
+    retries=3,
+    retry_delay_seconds=10,
+    tags=["data", "download"]
+)
 def download_pdfs(data_path: str) -> str:
     """
     Download sample PDFs for RAGAS testset generation.
@@ -56,12 +112,17 @@ def download_pdfs(data_path: str) -> str:
         ("https://arxiv.org/pdf/2505.06817.pdf", "control_plane_scalable_design_pattern_2505.06817.pdf")
     ]
     
+    successful_downloads = 0
+    failed_downloads = 0
+    skipped_downloads = 0
+    
     for url, filename in pdf_urls:
         output_path = pdf_dir / filename
         
         # Skip download if file already exists
         if output_path.exists():
             logger.info(f"File {filename} already exists, skipping download")
+            skipped_downloads += 1
             continue
             
         logger.info(f"Downloading {url} to {output_path}")
@@ -71,9 +132,11 @@ def download_pdfs(data_path: str) -> str:
             subprocess.run([
                 "curl", "-L", "--ssl-no-revoke", url, "-o", str(output_path)
             ], check=True)
-        except (subprocess.CalledProcessError, FileNotFoundError):
+            logger.info(f"Successfully downloaded {filename} using curl")
+            successful_downloads += 1
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
             # Fallback to requests if curl fails or isn't available
-            logger.info("Curl failed, using requests library as fallback")
+            logger.warning(f"Curl failed with error: {str(e)}. Using requests library as fallback")
             try:
                 # Disable insecure request warnings when verify=False
                 import urllib3
@@ -83,27 +146,100 @@ def download_pdfs(data_path: str) -> str:
                 response.raise_for_status()
                 with open(output_path, 'wb') as f:
                     f.write(response.content)
+                logger.info(f"Successfully downloaded {filename} using requests")
+                successful_downloads += 1
             except Exception as e:
-                logger.error(f"Failed to download {url}: {e}")
+                logger.error(f"Failed to download {url}: {str(e)}")
+                failed_downloads += 1
                 continue
+    
+    # Create artifact with download summary
+    create_table_artifact(
+        key="pdf-download-summary",
+        table={
+            "columns": ["Metric", "Value"],
+            "data": [
+                ["Successful Downloads", successful_downloads],
+                ["Failed Downloads", failed_downloads],
+                ["Skipped (Already Existed)", skipped_downloads],
+                ["Total PDFs", successful_downloads + skipped_downloads]
+            ]
+        },
+        description="Summary of PDF download operations"
+    )
+    
+    # Emit event about download completion
+    emit_event(
+        event="pdfs-downloaded",
+        resource={"prefect.resource.id": f"ragas-pipeline.data.{data_path}"},
+        payload={
+            "successful": successful_downloads,
+            "failed": failed_downloads,
+            "skipped": skipped_downloads,
+            "data_path": data_path
+        }
+    )
     
     return data_path
 
-@task
+@task(
+    name="load-documents",
+    description="Loads PDF documents from a directory using LangChain's PyPDFDirectoryLoader",
+    tags=["data", "loading"]
+)
 def load_documents(path: str) -> List:
     """
     Load PDF documents from a directory using LangChain's PyPDFDirectoryLoader.
     """
     logger = get_run_logger()
-    loader = PyPDFDirectoryLoader(path, glob="*.pdf", silent_errors=True)
-    docs = loader.load()
-    logger.info(f"Loaded {len(docs)} pages across all PDFs")
-    return docs
+    logger.info(f"Loading documents from {path}...")
+    
+    try:
+        loader = PyPDFDirectoryLoader(path, glob="*.pdf", silent_errors=True)
+        docs = loader.load()
+        num_docs = len(docs)
+        
+        if num_docs == 0:
+            logger.warning(f"No documents were loaded from {path}. Check that valid PDFs exist in this directory.")
+            return []
+            
+        logger.info(f"Successfully loaded {num_docs} pages across all PDFs")
+        
+        # Create artifact with document loading summary
+        create_table_artifact(
+            key="document-loading-summary",
+            table={
+                "columns": ["Metric", "Value"],
+                "data": [
+                    ["Documents Loaded", num_docs],
+                    ["Source Directory", path]
+                ]
+            },
+            description="Summary of document loading operation"
+        )
+        
+        # Emit event about document loading
+        emit_event(
+            event="documents-loaded",
+            resource={"prefect.resource.id": f"ragas-pipeline.documents.{path}"},
+            payload={
+                "document_count": num_docs,
+                "source_path": path
+            }
+        )
+        
+        return docs
+    except Exception as e:
+        logger.error(f"Error loading documents from {path}: {str(e)}")
+        raise
 
 @task(
+    name="build-testset",
+    description="Builds RAGAS testset and generates knowledge graph",
     retries=3,
     retry_delay_seconds=10,
-    cache_policy=NO_CACHE
+    cache_policy=NO_CACHE,
+    tags=["ragas", "generation"]
 )
 def build_testset(
     docs: List,
@@ -117,6 +253,8 @@ def build_testset(
     No caching to ensure knowledge graph is always generated.
     """
     logger = get_run_logger()
+    logger.info(f"Building testset of size {size} with {len(docs)} documents")
+    
     kg_path = Path(knowledge_graph_output_path)
     
     # Check if output file exists before proceeding
@@ -131,50 +269,74 @@ def build_testset(
         kg_path.unlink()
         logger.info(f"Removed existing knowledge graph at {knowledge_graph_output_path}")
     
-    llm = LangchainLLMWrapper(ChatOpenAI(model=llm_model))
-    emb = LangchainEmbeddingsWrapper(OpenAIEmbeddings(model=embedding_model))
-    generator = TestsetGenerator(llm=llm, embedding_model=emb)
-    dataset = generator.generate_with_langchain_docs(docs, testset_size=size)
-    
-    # Save the knowledge graph
-    kg = generator.knowledge_graph
-    kg_path.parent.mkdir(parents=True, exist_ok=True)
-    kg.save(str(kg_path))
-    logger.info(f"Knowledge graph saved to {knowledge_graph_output_path} from build_testset task")
-    
-    # Create an artifact to document successful generation
-    create_markdown_artifact(
-        key="knowledge-graph-status",
-        markdown=f"# Knowledge Graph Generated\nSuccessfully generated knowledge graph and saved to `{knowledge_graph_output_path}`.\n\nTest set size: {size}\nLLM model: {llm_model}\nEmbedding model: {embedding_model}",
-        description="Status of knowledge graph generation"
-    )
-    
-    # Create a link artifact to make it easy to access the file
-    file_uri = f"file://{os.path.abspath(knowledge_graph_output_path)}"
-    create_link_artifact(
-        key="knowledge-graph-file",
-        link=file_uri,
-        link_text="Knowledge Graph JSON File",
-        description="Link to the generated knowledge graph file"
-    )
-    
-    return dataset
+    try:
+        # Initialize testset generator
+        logger.debug(f"Initializing RAGAS TestsetGenerator with {llm_model} and {embedding_model}")
+        llm = LangchainLLMWrapper(ChatOpenAI(model=llm_model))
+        emb = LangchainEmbeddingsWrapper(OpenAIEmbeddings(model=embedding_model))
+        generator = TestsetGenerator(llm=llm, embedding_model=emb)
+        
+        # Generate testset
+        logger.info(f"Generating testset with {size} samples...")
+        dataset = generator.generate_with_langchain_docs(docs, testset_size=size)
+        logger.info(f"Successfully generated testset with {size} samples")
+        
+        # Save the knowledge graph
+        kg = generator.knowledge_graph
+        kg_path.parent.mkdir(parents=True, exist_ok=True)
+        kg.save(str(kg_path))
+        logger.info(f"Knowledge graph saved to {knowledge_graph_output_path}")
+        
+        # Create an artifact to document successful generation
+        create_markdown_artifact(
+            key="knowledge-graph-status",
+            markdown=f"# Knowledge Graph Generated\nSuccessfully generated knowledge graph and saved to `{knowledge_graph_output_path}`.\n\n**Details:**\n- Test set size: {size}\n- Documents used: {len(docs)}\n- LLM model: {llm_model}\n- Embedding model: {embedding_model}",
+            description="Status of knowledge graph generation"
+        )
+        
+        # Create a link artifact to make it easy to access the file
+        file_uri = f"file://{os.path.abspath(knowledge_graph_output_path)}"
+        create_link_artifact(
+            key="knowledge-graph-file",
+            link=file_uri,
+            link_text="Knowledge Graph JSON File",
+            description="Link to the generated knowledge graph file"
+        )
+        
+        # Emit event for successful generation
+        emit_event(
+            event="knowledge-graph-generated",
+            resource={"prefect.resource.id": f"ragas-pipeline.knowledge-graph.{knowledge_graph_output_path}"},
+            payload={
+                "path": knowledge_graph_output_path,
+                "testset_size": size,
+                "documents_count": len(docs),
+                "llm_model": llm_model,
+                "embedding_model": embedding_model
+            }
+        )
+        
+        return dataset
+    except Exception as e:
+        logger.error(f"Error building testset: {str(e)}")
+        
+        # Create artifact for failed generation
+        create_markdown_artifact(
+            key="knowledge-graph-status",
+            markdown=f"# ❌ Knowledge Graph Generation Failed\nFailed to generate knowledge graph at `{knowledge_graph_output_path}`.\n\n**Error:**\n```\n{str(e)}\n```\n\n**Parameters:**\n- Test set size: {size}\n- Documents used: {len(docs)}\n- LLM model: {llm_model}\n- Embedding model: {embedding_model}",
+            description="Status of knowledge graph generation"
+        )
+        
+        # Re-raise the exception
+        raise
 
-@task(cache_policy=NO_CACHE)
-def save_knowledge_graph(
-    generator: TestsetGenerator,
-    output_path: str
-) -> str:
-    """
-    Serialize the RAGAS knowledge graph to JSON.
-    """
-    kg = generator.knowledge_graph
-    out = Path(output_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    kg.save(str(out))
-    return str(out)
-
-@task
+@task(
+    name="push-to-hub",
+    description="Pushes the generated testset to a Hugging Face repository",
+    retries=2,
+    retry_delay_seconds=30,
+    tags=["huggingface", "publish"]
+)
 def push_to_hub(dataset: object, repo_name: str) -> str:
     """
     Push the generated testset to a Hugging Face repository.
@@ -182,41 +344,117 @@ def push_to_hub(dataset: object, repo_name: str) -> str:
     Note: When deployed with Prefect, the HF_TOKEN should be set
     as an environment variable or using Prefect secrets.
     """
-    # Prefect will automatically substitute the HF_TOKEN variable
-    # when running as a deployment
-    login(token=os.environ.get("HF_TOKEN", ""), add_to_git_credential=False)
-    hf_dataset = dataset.to_hf_dataset()  # Convert RAGAS dataset to HF dataset
-    hf_dataset.push_to_hub(repo_name)
-    return repo_name
+    logger = get_run_logger()
+    logger.info(f"Pushing dataset to Hugging Face repository: {repo_name}")
+    
+    try:
+        # Prefect will automatically substitute the HF_TOKEN variable
+        # when running as a deployment
+        token = os.environ.get("HF_TOKEN", "")
+        if not token:
+            raise ValueError("HF_TOKEN environment variable is not set")
+            
+        login(token=token, add_to_git_credential=False)
+        hf_dataset = dataset.to_hf_dataset()  # Convert RAGAS dataset to HF dataset
+        logger.info(f"Converted RAGAS dataset to Hugging Face dataset format")
+        
+        hf_dataset.push_to_hub(repo_name)
+        logger.info(f"Successfully pushed dataset to {repo_name}")
+        
+        # Create artifact for successful push
+        create_markdown_artifact(
+            key="huggingface-push",
+            markdown=f"# Dataset Published to Hugging Face\nSuccessfully pushed dataset to repository: [{repo_name}](https://huggingface.co/datasets/{repo_name})",
+            description="Hugging Face repository information"
+        )
+        
+        # Emit event for successful push
+        emit_event(
+            event="dataset-published",
+            resource={"prefect.resource.id": f"ragas-pipeline.dataset.{repo_name}"},
+            payload={
+                "repo_name": repo_name,
+                "platform": "huggingface"
+            }
+        )
+        
+        return repo_name
+    except Exception as e:
+        logger.error(f"Failed to push dataset to Hugging Face: {str(e)}")
+        
+        # Create artifact for failed push
+        create_markdown_artifact(
+            key="huggingface-push",
+            markdown=f"# ❌ Failed to Publish Dataset\nFailed to push dataset to Hugging Face repository: {repo_name}\n\n**Error:**\n```\n{str(e)}\n```",
+            description="Hugging Face repository error"
+        )
+        
+        # Re-raise the exception
+        raise
 
-@flow(name="RAGAS Golden Dataset Pipeline")
+@flow(
+    name="RAGAS Golden Dataset Pipeline",
+    description="Generates a RAG test dataset and knowledge graph from PDF documents",
+    log_prints=True,
+    version=os.environ.get("PIPELINE_VERSION", "1.0.0")
+)
 def ragas_pipeline(
     docs_path: str = "data/",
     testset_size: int = 10,
     knowledge_graph_path: str = "output/kg.json",
-    hf_repo: str = "",
+    HF_TESTSET_REPO: str = "",
     llm_model: str = "gpt-4.1-mini",
     embedding_model: str = "text-embedding-3-small"
 ) -> None:
     """
     Orchestrates the full pipeline:
-      1. Download PDFs (if needed)
-      2. Load documents
-      3. Generate testset & KG
-      4. Save KG as JSON
-      5. (Optional) Push testset to HF Hub
+      1. Validate environment
+      2. Download PDFs (if needed)
+      3. Load documents
+      4. Generate testset & KG
+      5. Save KG as JSON
+      6. (Optional) Push testset to HF Hub
     """
     logger = get_run_logger()
+    logger.info(f"Starting RAGAS Golden Dataset Pipeline")
+    logger.info(f"Parameters: docs_path={docs_path}, testset_size={testset_size}, knowledge_graph_path={knowledge_graph_path}")
+    logger.info(f"Models: LLM={llm_model}, Embeddings={embedding_model}")
+    
+    # First validate environment variables
+    env_vars = validate_environment()
+    
+    # Create artifact with pipeline configuration
+    create_table_artifact(
+        key="pipeline-configuration",
+        table={
+            "columns": ["Parameter", "Value"],
+            "data": [
+                ["Documents Path", docs_path],
+                ["Testset Size", testset_size],
+                ["Knowledge Graph Path", knowledge_graph_path],
+                ["Hugging Face Repo", HF_TESTSET_REPO or "Not specified"],
+                ["LLM Model", llm_model],
+                ["Embedding Model", embedding_model]
+            ]
+        },
+        description="Pipeline configuration parameters"
+    )
     
     # Download PDFs if directory is empty
     if not any(Path(docs_path).glob("*.pdf")):
         logger.info(f"No PDFs found in {docs_path}, downloading samples...")
         docs_path = download_pdfs(docs_path)
+    else:
+        logger.info(f"Found existing PDFs in {docs_path}, skipping download")
     
-    logger.info(f"Loading documents from %s", docs_path)
+    logger.info(f"Loading documents from {docs_path}")
     docs = load_documents(docs_path)
+    
+    if not docs:
+        logger.error(f"No documents were loaded from {docs_path}. Cannot proceed with testset generation.")
+        return None
 
-    logger.info(f"Generating testset of size %d and saving KG to %s", testset_size, knowledge_graph_path)
+    logger.info(f"Generating testset of size {testset_size} and saving KG to {knowledge_graph_path}")
     dataset = build_testset(
         docs, 
         testset_size,
@@ -225,9 +463,22 @@ def ragas_pipeline(
         embedding_model=embedding_model
     )
 
-    if hf_repo:
-        logger.info(f"Pushing dataset to Hugging Face repo %s", hf_repo)
-        push_to_hub(dataset, hf_repo)
+    if HF_TESTSET_REPO:
+        logger.info(f"Pushing dataset to Hugging Face repo {HF_TESTSET_REPO}")
+        push_to_hub(dataset, HF_TESTSET_REPO)
+    else:
+        logger.info("No Hugging Face repository specified, skipping push step")
+    
+    logger.info("RAGAS Golden Dataset Pipeline completed successfully")
+    
+    # Final success artifact
+    create_markdown_artifact(
+        key="pipeline-summary",
+        markdown=f"# Pipeline Execution Summary\n\n## Success! ✅\n\nThe RAGAS Golden Dataset Pipeline completed successfully.\n\n## Outputs\n- Knowledge Graph: `{knowledge_graph_path}`\n- Test Set Size: {testset_size}\n- Documents Processed: {len(docs)} pages\n{f'- Published to: [{HF_TESTSET_REPO}](https://huggingface.co/datasets/{HF_TESTSET_REPO})' if HF_TESTSET_REPO else ''}",
+        description="Pipeline execution summary"
+    )
+    
+    return dataset
 
 
 if __name__ == "__main__":
@@ -245,7 +496,7 @@ if __name__ == "__main__":
                         default=os.environ.get("KG_OUTPUT_PATH", "output/kg.json"),
                         help="File path for the serialized knowledge graph")
     parser.add_argument("--hf-repo", type=str, 
-                        default=os.environ.get("HF_REPO", ""),
+                        default=os.environ.get("HF_TESTSET_REPO", ""),
                         help="(Optional) HF Hub repository name to push the dataset")
     parser.add_argument("--llm-model", type=str,
                         default=os.environ.get("LLM_MODEL", "gpt-4.1-mini"),
@@ -256,12 +507,20 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
+    print("Starting RAGAS Golden Dataset Pipeline with the following parameters:")
+    print(f"- Documents Path: {args.docs_path}")
+    print(f"- Testset Size: {args.testset_size}")
+    print(f"- Knowledge Graph Output: {args.kg_output}")
+    print(f"- Hugging Face Repo: {args.HF_TESTSET_REPO or 'Not specified'}")
+    print(f"- LLM Model: {args.llm_model}")
+    print(f"- Embedding Model: {args.embedding_model}")
+    
     # Run the pipeline with parsed arguments
     ragas_pipeline(
         docs_path=args.docs_path,
         testset_size=args.testset_size,
         knowledge_graph_path=args.kg_output,
-        hf_repo=args.hf_repo,
+        HF_TESTSET_REPO=args.HF_TESTSET_REPO,
         llm_model=args.llm_model,
         embedding_model=args.embedding_model
     )

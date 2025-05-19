@@ -53,7 +53,7 @@ def validate_environment() -> None:
 
     required_vars_by_category = {
         "OpenAI": ["OPENAI_API_KEY"],
-        "HuggingFace": ["HF_TOKEN", "HF_REPO"],
+        "HuggingFace": ["HF_TOKEN", "HF_TESTSET_REPO"],
         "LLM Config": ["LLM_MODEL", "EMBEDDING_MODEL"],
         "Pipeline Config": ["DOCS_PATH", "TESTSET_SIZE", "KG_OUTPUT_PATH"],
         "Prefect": ["PREFECT_SERVER_ALLOW_EPHEMERAL_MODE", "PREFECT_API_URL"],
@@ -272,27 +272,27 @@ def build_testset(
     return dataset
 
 @task(name="push-to-hub")
-def push_to_hub(dataset, hf_repo: str) -> str:
+def push_to_hub(dataset, HF_TESTSET_REPO: str) -> str:
     logger = get_run_logger()
     token = os.environ["HF_TOKEN"]
     login(token=token, add_to_git_credential=False)
     hf_dataset = dataset.to_hf_dataset()
-    hf_dataset.push_to_hub(hf_repo)
-    url = f"https://huggingface.co/datasets/{hf_repo}"
+    hf_dataset.push_to_hub(HF_TESTSET_REPO)
+    url = f"https://huggingface.co/datasets/{HF_TESTSET_REPO}"
     logger.info(f"Pushed dataset to {url}")
 
     create_markdown_artifact(
         key="hf-push",
-        markdown=f"**Dataset published**: [{hf_repo}]({url})",
+        markdown=f"**Dataset published**: [{HF_TESTSET_REPO}]({url})",
         description="Hugging Face repository link",
     )
 
     emit_event(
         event="dataset-published",
-        resource={"prefect.resource.id": f"ragas-pipeline.dataset.{hf_repo}"},
-        payload={"repo_name": hf_repo},
+        resource={"prefect.resource.id": f"ragas-pipeline.dataset.{HF_TESTSET_REPO}"},
+        payload={"repo_name": HF_TESTSET_REPO},
     )
-    return hf_repo
+    return HF_TESTSET_REPO
 
 # ------------------------------------------------------------------------------
 # Main Flow
@@ -304,7 +304,7 @@ def ragas_pipeline(
     TESTSET_SIZE: int = int(os.environ.get("TESTSET_SIZE", "10")),
     KG_OUTPUT_PATH: str = os.environ.get("KG_OUTPUT_PATH", "output/kg.json"),
     OUTPUT_DIR: str = os.environ.get("OUTPUT_DIR", "output/"),
-    HF_REPO: str = os.environ.get("HF_REPO", ""),
+    HF_TESTSET_REPO: str = os.environ.get("HF_TESTSET_REPO", ""),
     OPENAI_API_KEY: str = os.environ.get("OPENAI_API_KEY", ""),
     HF_TOKEN: str = os.environ.get("HF_TOKEN", ""),
     LLM_MODEL: str = os.environ.get("LLM_MODEL", "gpt-4.1-mini"),
@@ -324,7 +324,7 @@ def ragas_pipeline(
         ["TESTSET_SIZE", TESTSET_SIZE],
         ["KG_OUTPUT_PATH", KG_OUTPUT_PATH],
         ["OUTPUT_DIR", OUTPUT_DIR],
-        ["HF_REPO", HF_REPO or "Not specified"],
+        ["HF_TESTSET_REPO", HF_TESTSET_REPO or "Not specified"],
         ["LLM_MODEL", LLM_MODEL],
         ["EMBEDDING_MODEL", EMBEDDING_MODEL],
         ["PREFECT_API_URL", PREFECT_API_URL or "Not specified"],
@@ -359,10 +359,10 @@ def ragas_pipeline(
     )
 
     # 7. Push to Hugging Face if specified
-    if HF_REPO:
-        push_to_hub(dataset, HF_REPO)
+    if HF_TESTSET_REPO:
+        push_to_hub(dataset, HF_TESTSET_REPO)
     else:
-        logger.info("No HF_REPO specified; skipping push.")
+        logger.info("No HF_TESTSET_REPO specified; skipping push.")
 
     logger.info("✅ Pipeline completed successfully.")
 

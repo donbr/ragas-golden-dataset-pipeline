@@ -79,7 +79,7 @@ Set the following environment variables or create a `.env` file:
 
 * `OPENAI_API_KEY`: Your OpenAI API key for model access.
 * `HF_TOKEN`: Your Hugging Face API token for dataset uploads.
-* `HF_REPO`: Your Hugging Face repository name (optional).
+* `HF_TESTSET_REPO`: Your Hugging Face repository name (optional).
 * `LANGSMITH_API_KEY`: Your LangSmith API key for tracing (optional).
 * `LANGSMITH_TRACING`: Set to "true" to enable tracing (optional).
 * `LANGSMITH_PROJECT`: Project name for LangSmith tracing (optional).
@@ -89,7 +89,7 @@ Example `.env` file:
 ```
 OPENAI_API_KEY=sk-xxx...
 HF_TOKEN=hf_xxx...
-HF_REPO=your-username/ragas-golden-dataset
+HF_TESTSET_REPO=your-username/ragas-golden-dataset
 LANGSMITH_API_KEY=ls_xxx...
 LANGSMITH_TRACING=true
 LANGSMITH_PROJECT=ragas-golden-dataset
