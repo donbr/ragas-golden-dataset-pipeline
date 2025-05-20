@@ -34,12 +34,12 @@ def validate_environment() -> Dict[str, List[str]]:
     """
     logger = get_run_logger()
     logger.info("Validating environment variables...")
-    
+
     # Required variables for different operations
     required_vars = {
         "HuggingFace": ["HF_TOKEN"] if os.environ.get("HF_DOCLOADER_REPO") else []
     }
-    
+
     # Check for missing required variables
     missing_vars = {}
     for category, vars_list in required_vars.items():
