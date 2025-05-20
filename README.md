@@ -17,7 +17,6 @@ A comprehensive toolkit for generating high-quality Retrieval-Augmented Generati
   - [Pipeline Architecture](#pipeline-architecture)
     - [System Architecture](#system-architecture)
     - [Data Flow](#data-flow)
-    - [Component Relationships](#component-relationships)
   - [Documentation](#documentation)
   - [Troubleshooting](#troubleshooting)
     - [Common Issues](#common-issues)
@@ -240,49 +239,6 @@ flowchart LR
     class B,C,D,E,F process
     class A,G1,G2,H1,H2 data
     class G1,G2,H1,H2 output
-```
-
-### Component Relationships
-
-```mermaid
-erDiagram
-    DOCUMENT ||--o{ CHUNK : contains
-    DOCUMENT {
-        string filename
-        string content
-        string metadata
-    }
-    CHUNK {
-        string text
-        int index
-        vector embedding
-    }
-    CHUNK ||--o{ QUESTION : generates
-    QUESTION {
-        string text
-        vector embedding
-    }
-    QUESTION ||--|| ANSWER : has
-    ANSWER {
-        string text
-        vector embedding
-    }
-    DOCUMENT ||--o{ CONCEPT : contains
-    CONCEPT {
-        string name
-        string definition
-        vector embedding
-    }
-    CONCEPT ||--o{ QUESTION : about
-    KNOWLEDGE_GRAPH ||--o{ DOCUMENT : includes
-    KNOWLEDGE_GRAPH ||--o{ CONCEPT : includes
-    KNOWLEDGE_GRAPH ||--o{ QUESTION : includes
-    KNOWLEDGE_GRAPH ||--o{ ANSWER : includes
-    KNOWLEDGE_GRAPH {
-        int nodes
-        int edges
-        string filename
-    }
 ```
 
 ---
