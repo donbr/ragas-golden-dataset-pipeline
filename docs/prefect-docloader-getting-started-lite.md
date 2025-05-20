@@ -2,7 +2,7 @@
 
 This guide introduces the LangChain Document Loader Structure Comparison Pipeline, a Prefect workflow that loads documents from PDFs, arXiv papers, and web pages, compares their structures, and publishes them to Hugging Face Hub. It’s ideal for AI engineers and developers analyzing document loader behavior.
 
-## What This Pipeline Does
+## What This Prefect Pipeline Does
 
 The pipeline:
 1. Loads documents using [LangChain document loaders](https://python.langchain.com/docs/integrations/document_loaders/):
@@ -18,9 +18,7 @@ It reveals nuances in document loader behavior, useful for document processing o
 
 ## Pipeline Workflow
 
-```
-[Start] → [Validate inputs] → [Load: PDFs, arXiv, Web] → [Normalize data] → [Save JSON] → [Analyze (Prefect UI)] → [Push to Hugging Face] → [End]
-```
+![Pipeline Workflow](./images/prefect-flow-diagram.svg)]
 
 ## Key Terms for Beginners
 

@@ -209,13 +209,13 @@ def load_pdf_documents(pdf_dir: str) -> List[Document]:
         raise
 
 @task(
-    name="load-arxiv-metadata",
+    name="load-arxiv-summaries",
     description="Loads document summaries from arXiv using IDs",
     retries=3,
     retry_delay_seconds=30,
     tags=["data", "arxiv", "loading"]
 )
-def load_arxiv_metadata(arxiv_ids: List[str]) -> List[Document]:
+def load_arxiv_summaries(arxiv_ids: List[str]) -> List[Document]:
     """
     Load arXiv document summaries using IDs.
     
@@ -644,7 +644,7 @@ def docloader_pipeline(
     
     # Submit document loading tasks concurrently
     pdf_future = load_pdf_documents.submit(PDF_DIR)
-    arxiv_future = load_arxiv_metadata.submit(ARXIV_IDS)
+    arxiv_future = load_arxiv_summaries.submit(ARXIV_IDS)
     webbase_future = load_webbase_html.submit(HTML_URLS)
     
     # Wait for results and save to JSON
