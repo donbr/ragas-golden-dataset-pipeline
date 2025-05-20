@@ -226,8 +226,7 @@ graph TD
 flowchart LR
     A[Input Documents] --> B[Document Loading]
     B --> C[Chunking & Preparation]
-    C --> D[RAG Generation]
-    D --> E[Knowledge Graph Construction]
+    C --> E[Knowledge Graph Construction]
     E --> F[Dataset Creation]
     F --> G1[JSON Output]
     F --> G2[HuggingFace Push]
