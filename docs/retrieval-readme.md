@@ -22,8 +22,8 @@ By working with this project, you'll gain practical experience with:
 This project includes three main documents to guide your learning:
 
 1. **README.md (this file)**: Practical guide for setup, usage, and basic troubleshooting
-2. **[concepts.md](./concepts.md)**: Core RAG concepts, component explanations, and examples
-3. **[advanced_concepts.md](./advanced_concepts.md)**: Advanced techniques, optimizations, and cutting-edge RAG approaches
+2. **[concepts.md](./retrieval-concepts.md)**: Core RAG concepts, component explanations, and examples
+3. **[advanced_concepts.md](./retrieval-advanced-concepts.md)**: Advanced techniques, optimizations, and cutting-edge RAG approaches
 
 We recommend following this progression to build from fundamentals to advanced understanding.
 
