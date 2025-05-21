@@ -6,7 +6,7 @@ This document provides detailed information about visualizing knowledge graphs g
 
 The RAGAS knowledge graph contains entities and relationships extracted from your documents. It represents the structured information that forms the basis of the evaluation dataset. Visualizing this graph can provide valuable insights into the relationships between concepts, questions, answers, and sources.
 
-![Knowledge Graph Example](../output/kg_visualization.png)
+![Knowledge Graph Example](../data/processed/visualizations/knowledge_graph.png)
 
 ## Visualization Tools
 
@@ -22,7 +22,7 @@ The pipeline includes several utilities for visualizing and analyzing knowledge 
 
 ```bash
 # Generate an interactive HTML visualization of the full knowledge graph
-python utilities/ragas_kg_visualization.py --input output/kg.json --output output/kg_visualization.html
+python utilities/ragas_kg_visualization.py
 ```
 
 This creates an HTML file with an interactive network graph that you can:
@@ -31,11 +31,13 @@ This creates an HTML file with an interactive network graph that you can:
 - Filter by node types to focus on specific entities
 - Search for particular entities or relationships
 
+The visualization will be saved to `data/processed/visualizations/` by default.
+
 ### Static PNG Visualization
 
 ```bash
 # Generate a static PNG visualization
-python utilities/ragas_kg_visualization.py --input output/kg.json --output output/kg_visualization.png --static
+python utilities/ragas_kg_visualization.py --static
 ```
 
 This creates a PNG image that can be easily shared in documentation or presentations.
@@ -46,10 +48,10 @@ For better performance, especially with large knowledge graphs, it's recommended
 
 ```bash
 # Remove embeddings from the knowledge graph
-python utilities/remove_embeddings.py --input output/kg.json --output output/kg_no_embeddings.json
+python utilities/remove_embeddings.py
 
 # Visualize the version without embeddings
-python utilities/ragas_kg_visualization.py --input output/kg_no_embeddings.json --output output/kg_no_embeddings_visualization.html
+python utilities/ragas_kg_visualization.py --input data/processed/kg_no_embeddings.json
 ```
 
 ## Advanced Analysis
@@ -58,7 +60,7 @@ For more detailed analysis of the knowledge graph:
 
 ```bash
 # Run comprehensive analysis
-python utilities/analyze_kg.py --input output/kg.json --output-dir output/analysis_results
+python utilities/analyze_kg.py
 ```
 
 This will create a directory with multiple analysis outputs including:
@@ -67,6 +69,8 @@ This will create a directory with multiple analysis outputs including:
 - Distribution of entity types
 - Community detection results
 - Multiple visualization formats
+
+Analysis results will be saved to `data/processed/analysis/` by default.
 
 ## Knowledge Graph Structure
 
@@ -98,8 +102,8 @@ From a typical run with 10 test samples:
 
 Knowledge graph files can be quite large due to embedded vector representations. Some typical file sizes:
 
-- Full knowledge graph (`kg.json`): ~10-20 MB
-- Knowledge graph without embeddings (`kg_no_embeddings.json`): ~1-2 MB
+- Full knowledge graph (`data/processed/kg.json`): ~10-20 MB
+- Knowledge graph without embeddings (`data/processed/no_embeddings/kg_no_embeddings.json`): ~1-2 MB
 - HTML visualization: ~2-5 MB
 - PNG visualization: ~100-500 KB
 
@@ -110,8 +114,7 @@ The visualization tools accept several parameters to customize the output:
 ```bash
 # Custom node colors and sizes
 python utilities/ragas_kg_visualization.py \
-  --input output/kg.json \
-  --output output/custom_visualization.html \
+  --output data/processed/visualizations/custom_visualization.html \
   --node-size 10 \
   --edge-width 2 \
   --concept-color "#3498db" \
@@ -120,8 +123,7 @@ python utilities/ragas_kg_visualization.py \
 
 # Filtering specific node types
 python utilities/ragas_kg_visualization.py \
-  --input output/kg.json \
-  --output output/filtered_visualization.html \
+  --output data/processed/visualizations/filtered_visualization.html \
   --include-types Concept,Question,Answer \
   --exclude-types Source
 ```

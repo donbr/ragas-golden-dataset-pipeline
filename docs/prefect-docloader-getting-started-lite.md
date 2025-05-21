@@ -100,7 +100,7 @@ It reveals nuances in document loader behavior, useful for document processing o
 Each contains content and metadata (e.g., `loader_type`, `load_timestamp`).
 
 ### 2. Prefect UI Artifacts
-- **pipeline-configuration**: Pipeline configuration parameters (e.g., `DOCS_PATH`, `ARXIV_IDS`).
+- **pipeline-configuration**: Pipeline configuration parameters (e.g., `RAW_DIR`, `ARXIV_IDS`).
 - **document-summary**: Summary of documents loaded from all sources (e.g., document counts per source).
 - **pipeline-summary**: Pipeline execution summary (e.g., total documents, output files, Hugging Face status).
 

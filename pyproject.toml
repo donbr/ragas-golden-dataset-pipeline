@@ -1,0 +1,46 @@
+[project]
+name = "13-advanced-retrieval"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    # Core LangChain packages
+    "langchain>=0.3.19",
+    "langchain-openai>=0.3.7",
+    "langchain-community",
+    "langchain-experimental>=0.3.4",
+    "langchain-cohere>=0.4.2",
+    "langchain-qdrant>=0.2.0",
+    
+    # Retrieval and storage
+    "qdrant-client>=1.13.2",
+    "rank-bm25>=0.2.2",
+    
+    # Web framework
+    "fastapi>=0.115.12",
+    "uvicorn>=0.34.2",
+    
+    # Development and notebooks
+    "jupyter>=1.1.1",
+    "nbformat>=4.2.0",
+    
+    # Utils and processing
+    "python-dotenv>=0.21.0",
+    "ragas==0.2.15",
+    "prefect==3.4.1",
+    "openai",
+    "pypdf",
+    "rapidfuzz",
+    "requests",
+    "urllib3",
+    "huggingface_hub",
+    "networkx",
+    "matplotlib",
+    "pandas",
+    "pyvis",
+    "plotly",
+    "pymupdf",
+    "arxiv",
+    "bs4",
+]

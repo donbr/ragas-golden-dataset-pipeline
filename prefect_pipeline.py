@@ -161,7 +161,7 @@ def validate_environment() -> Dict[str, List[str]]:
     # Optional but recommended variables
     optional_vars = {
         "LangSmith": ["LANGSMITH_PROJECT", "LANGSMITH_TRACING"],
-        "Pipeline Config": ["DOCS_PATH", "TESTSET_SIZE", "KG_OUTPUT_PATH"]
+        "Pipeline Config": ["RAW_DIR", "TESTSET_SIZE", "KG_OUTPUT_PATH"]
     }
     
     # Check for missing required variables
@@ -1150,7 +1150,7 @@ if __name__ == "__main__":
     
     # Required parameters with environment variable defaults
     parser.add_argument("--docs-path", type=str, 
-                        default=os.environ.get("DOCS_PATH", "data/"),
+                        default=os.environ.get("RAW_DIR", "data/"),
                         help="Directory with source documents")
     parser.add_argument("--testset-size", type=int, 
                         default=int(os.environ.get("TESTSET_SIZE", "10")),

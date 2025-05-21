@@ -5,7 +5,11 @@ Script to extract and print all unique node and relationship types from a RAGAS 
 
 import sys
 import os
-from kg_utils import load_kg_json, get_kg_stats
+from dotenv import load_dotenv
+from kg_utils import load_kg_json, get_kg_stats, setup_common_args, KG_OUTPUT_PATH
+
+# Load environment variables
+load_dotenv()
 
 def get_unique_types(json_file):
     """
@@ -80,15 +84,21 @@ def get_unique_types(json_file):
     else:
         print("No 'type' field found in node properties.")
 
+def main():
+    parser = setup_common_args("Extract and print all unique node and relationship types from a knowledge graph")
+    args = parser.parse_args()
+    
+    if not os.path.exists(args.input):
+        print(f"Error: File '{args.input}' not found.")
+        sys.exit(1)
+    
+    get_unique_types(args.input)
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(f"Usage: {sys.argv[0]} <knowledge_graph_json_file>")
-        print(f"Example: {sys.argv[0]} output/kg_no_embeddings.json")
-        sys.exit(1)
-    
-    json_file = sys.argv[1]
-    if not os.path.exists(json_file):
-        print(f"Error: File '{json_file}' not found.")
-        sys.exit(1)
-    
-    get_unique_types(json_file) 
+        print(f"Default: {sys.argv[0]} {KG_OUTPUT_PATH}")
+        # Use default path if none provided
+        get_unique_types(KG_OUTPUT_PATH)
+    else:
+        main() 

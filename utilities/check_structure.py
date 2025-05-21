@@ -1,5 +1,5 @@
 import sys
-from kg_utils import load_kg_json, find_embedding_fields, setup_common_args
+from kg_utils import load_kg_json, find_embedding_fields, setup_common_args, KG_OUTPUT_PATH
 
 def check_structure(json_file):
     """

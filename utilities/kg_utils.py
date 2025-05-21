@@ -10,6 +10,16 @@ import os
 import sys
 from typing import Dict, Any, List, Optional, Tuple, Union
 import argparse
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get environment variables with defaults
+RAW_DIR = os.environ.get("RAW_DIR", "data/raw")
+PROCESSED_DIR = os.environ.get("PROCESSED_DIR", "data/processed")
+KG_OUTPUT_PATH = os.environ.get("KG_OUTPUT_PATH", "data/processed/kg.json")
 
 def load_kg_json(input_file: str) -> Dict[str, Any]:
     """
@@ -49,6 +59,8 @@ def save_kg_json(data: Dict[str, Any], output_file: str) -> None:
         output_file: Path where the JSON file will be saved
     """
     try:
+        # Create parent directories if they don't exist
+        os.makedirs(os.path.dirname(os.path.abspath(output_file)), exist_ok=True)
         print(f"Saving JSON to {output_file}...")
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
@@ -174,8 +186,8 @@ def setup_common_args(description: str) -> argparse.ArgumentParser:
         Configured ArgumentParser instance
     """
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--input', '-i', type=str, default='output/kg.json',
-                      help='Path to the input knowledge graph JSON file')
+    parser.add_argument('--input', '-i', type=str, default=KG_OUTPUT_PATH,
+                      help=f'Path to the input knowledge graph JSON file (default: {KG_OUTPUT_PATH})')
     parser.add_argument('--output', '-o', type=str, 
                       help='Path to save the output file (default: based on input filename)')
     return parser

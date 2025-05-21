@@ -9,7 +9,8 @@ providing a simple interface for visualizing knowledge graphs.
 import sys
 import os
 import argparse
-from kg_utils import load_kg_json
+from dotenv import load_dotenv
+from kg_utils import load_kg_json, KG_OUTPUT_PATH, PROCESSED_DIR
 
 # Ensure analyze_kg.py is available
 try:
@@ -17,6 +18,9 @@ try:
 except ImportError:
     print("Error: This script requires analyze_kg.py to be in the same directory.")
     sys.exit(1)
+
+# Load environment variables
+load_dotenv()
 
 def visualize_kg(input_file, output_file=None, interactive=True):
     """
@@ -29,7 +33,8 @@ def visualize_kg(input_file, output_file=None, interactive=True):
     """
     # Set default output filenames
     if output_file is None:
-        output_dir = "."
+        output_dir = os.path.join(PROCESSED_DIR, "visualizations")
+        os.makedirs(output_dir, exist_ok=True)
         base_name = os.path.splitext(os.path.basename(input_file))[0]
         
         if interactive:
@@ -67,8 +72,8 @@ def visualize_kg(input_file, output_file=None, interactive=True):
 
 def main():
     parser = argparse.ArgumentParser(description="Visualize a RAGAS knowledge graph")
-    parser.add_argument('--input', '-i', type=str, default='output/kg.json',
-                      help='Path to the knowledge graph JSON file')
+    parser.add_argument('--input', '-i', type=str, default=KG_OUTPUT_PATH,
+                      help=f'Path to the knowledge graph JSON file (default: {KG_OUTPUT_PATH})')
     parser.add_argument('--output', '-o', type=str, default=None,
                       help='Path to save the visualization output')
     parser.add_argument('--static', action='store_true',

@@ -1,6 +1,6 @@
 import sys
 import os
-from kg_utils import load_kg_json, save_kg_json, remove_embedding_fields, setup_common_args, get_default_output_filename
+from kg_utils import load_kg_json, save_kg_json, remove_embedding_fields, setup_common_args, get_default_output_filename, KG_OUTPUT_PATH, PROCESSED_DIR
 
 def remove_summary_embeddings(input_file, output_file=None):
     """
@@ -21,6 +21,9 @@ def remove_summary_embeddings(input_file, output_file=None):
     
     # Remove embedding fields and get count
     modified_data, total_fields_removed = remove_embedding_fields(data)
+    
+    # Create output directory if needed
+    os.makedirs(os.path.dirname(os.path.abspath(output_file)), exist_ok=True)
     
     # Save the modified data
     save_kg_json(modified_data, output_file)

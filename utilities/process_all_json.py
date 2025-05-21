@@ -2,7 +2,11 @@ import os
 import sys
 import glob
 import argparse
-from kg_utils import get_default_output_filename, load_kg_json, save_kg_json, remove_embedding_fields
+from dotenv import load_dotenv
+from kg_utils import get_default_output_filename, load_kg_json, save_kg_json, remove_embedding_fields, PROCESSED_DIR
+
+# Load environment variables
+load_dotenv()
 
 def process_directory(directory_path, pattern="*.json"):
     """
@@ -20,6 +24,10 @@ def process_directory(directory_path, pattern="*.json"):
         return
     
     print(f"Found {len(json_files)} JSON files to process")
+    
+    # Create output directory
+    output_dir = os.path.join(PROCESSED_DIR, "no_embeddings")
+    os.makedirs(output_dir, exist_ok=True)
     
     total_processed = 0
     total_fields_removed = 0
@@ -41,7 +49,8 @@ def process_directory(directory_path, pattern="*.json"):
             modified_data, fields_removed = remove_embedding_fields(data)
             
             # Create output filename
-            output_file = get_default_output_filename(json_file, "no_embeddings")
+            filename = os.path.basename(json_file)
+            output_file = os.path.join(output_dir, filename.replace(".json", "_no_embeddings.json"))
             
             # Save modified data
             save_kg_json(modified_data, output_file)
@@ -64,10 +73,12 @@ def process_directory(directory_path, pattern="*.json"):
     print(f"\nSummary:")
     print(f"  Files processed: {total_processed}")
     print(f"  Embedding fields removed: {total_fields_removed}")
+    print(f"  Output directory: {output_dir}")
 
 def main():
     parser = argparse.ArgumentParser(description="Process all JSON files in a directory to remove embedding fields")
-    parser.add_argument('directory', type=str, help="Directory containing JSON files to process")
+    parser.add_argument('directory', type=str, nargs='?', default=PROCESSED_DIR, 
+                        help=f"Directory containing JSON files to process (default: {PROCESSED_DIR})")
     parser.add_argument('--pattern', type=str, default="*.json", help="Glob pattern for files (default: *.json)")
     
     args = parser.parse_args()

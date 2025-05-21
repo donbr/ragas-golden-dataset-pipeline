@@ -230,7 +230,7 @@ Specialized for loading and comparing documents from multiple sources.
 
 ### Environment Variables
 
-- `DOCS_PATH`: Directory containing PDF files (default: "data/")
+- `RAW_DIR`: Directory containing PDF files (default: "data/")
 - `HF_DOCLOADER_REPO`: HuggingFace repository for pushing the dataset (optional)
 - `ARXIV_IDS`: Comma-separated list of arXiv IDs to fetch
 - `HTML_URLS`: Comma-separated list of HTML URLs to fetch

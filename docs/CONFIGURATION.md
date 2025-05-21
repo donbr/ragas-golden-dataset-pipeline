@@ -24,8 +24,8 @@ Configure the pipeline through environment variables in a `.env` file:
 
 - **Project Configuration**:
   - `TESTSET_SIZE`: Number of test samples to generate (default: 10)
-  - `DOCS_PATH`: Directory with source documents (default: "data/")
-  - `OUTPUT_DIR`: Directory for outputs (default: "output/")
+  - `RAW_DIR`: Directory with source documents (default: "data/")
+  - `PROCESSED_DIR`: Directory for outputs (default: "output/")
   - `KG_OUTPUT_PATH`: Path for knowledge graph output (default: "output/kg.json")
 
 - **DocLoader Configuration**:
@@ -60,8 +60,8 @@ EMBEDDING_MODEL=text-embedding-3-small
 
 # Project Settings
 TESTSET_SIZE=10
-DOCS_PATH=data/
-OUTPUT_DIR=output/
+RAW_DIR=data/
+PROCESSED_DIR=output/
 KG_OUTPUT_PATH=output/kg.json
 
 # DocLoader Settings

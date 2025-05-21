@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from collections import Counter
 import argparse
-from kg_utils import load_kg_json, get_kg_stats, setup_common_args
+from kg_utils import load_kg_json, get_kg_stats, setup_common_args, PROCESSED_DIR
 
 # Handle the pyvis import gracefully
 try:
@@ -344,8 +344,8 @@ def create_interactive_visualization(G, output_path):
 def main():
     # Replace with setup_common_args from kg_utils
     parser = setup_common_args('Analyze RAGAS Knowledge Graph')
-    parser.add_argument('--output-dir', type=str, default='analysis',
-                        help='Directory to save analysis outputs')
+    parser.add_argument('--output-dir', type=str, default=os.path.join(PROCESSED_DIR, 'analysis'),
+                        help=f'Directory to save analysis outputs (default: {os.path.join(PROCESSED_DIR, "analysis")})')
     
     args = parser.parse_args()
     

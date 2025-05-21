@@ -598,7 +598,7 @@ def push_to_huggingface(records: List[Dict[str, str]], repo_name: str) -> str:
     version=os.environ.get("PIPELINE_VERSION", "1.0.0")
 )
 def docloader_pipeline(
-    PDF_DIR: str = os.environ.get("DOCS_PATH", "data/"),
+    PDF_DIR: str = os.environ.get("RAW_DIR", "data/"),
     ARXIV_IDS: List[str] = ["2505.10468", "2505.06913", "2505.06817"],
     HTML_URLS: List[str] = [
         "https://arxiv.org/html/2505.10468v1",

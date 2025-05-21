@@ -33,9 +33,18 @@ combined_df = metadata_manager.documents_to_dataframe(all_docs, include_all_meta
 - PubMed Loader: https://python.langchain.com/docs/integrations/document_loaders/pubmed
 """
 
+import os
 import pandas as pd
 from typing import List, Dict, Any, Optional, Union, Set
 from langchain_core.documents import Document
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get environment variables with defaults
+RAW_DIR = os.environ.get("RAW_DIR", "data/raw")
+PROCESSED_DIR = os.environ.get("PROCESSED_DIR", "data/processed")
 
 class DocumentMetadataManager:
     """
@@ -411,7 +420,7 @@ def main():
     
     # Setup loader
     loader = PyPDFDirectoryLoader(
-        "data/",              # directory path
+        RAW_DIR,              # directory path from environment variable
         glob="*.pdf",         # file pattern
         silent_errors=True,   # skip unreadable files
     )
@@ -432,10 +441,13 @@ def main():
     )
     
     # Save DataFrame to CSV
-    docs_df.to_csv("pdf_documents_metadata.csv", index=False)
+    output_path = os.path.join(PROCESSED_DIR, "pdf_documents_metadata.csv")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    docs_df.to_csv(output_path, index=False)
     
     # Display summary
     print(f"Saved metadata for {len(docs_df)} documents to CSV")
+    print(f"Output path: {output_path}")
     print(f"Columns in DataFrame: {', '.join(docs_df.columns)}")
     
     return docs_df

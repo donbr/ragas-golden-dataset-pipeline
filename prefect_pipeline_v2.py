@@ -72,7 +72,7 @@ def validate_environment() -> Dict[str, List[str]]:
         "OpenAI": ["OPENAI_API_KEY"],
         "HuggingFace": ["HF_TOKEN", "HF_TESTSET_REPO_V2"],
         "LLM Config": ["LLM_MODEL", "EMBEDDING_MODEL"],
-        "Pipeline Config": ["DOCS_PATH", "TESTSET_SIZE", "KG_OUTPUT_PATH"],
+        "Pipeline Config": ["RAW_DIR", "TESTSET_SIZE", "KG_OUTPUT_PATH"],
         "Prefect": ["PREFECT_SERVER_ALLOW_EPHEMERAL_MODE", "PREFECT_API_URL"],
     }
 
@@ -773,10 +773,10 @@ def push_to_hub(hf_dataset: Any, repo_name: str) -> str:
     version=os.environ.get("PIPELINE_VERSION", "1.0.0")
 )
 def ragas_pipeline(
-    DOCS_PATH: str = os.environ.get("DOCS_PATH", "data/"),
+    RAW_DIR: str = os.environ.get("RAW_DIR"),
     TESTSET_SIZE: int = int(os.environ.get("TESTSET_SIZE", "10")),
     KG_OUTPUT_PATH: str = os.environ.get("KG_OUTPUT_PATH", "output/kg.json"),
-    OUTPUT_DIR: str = os.environ.get("OUTPUT_DIR", "output/"),
+    PROCESSED_DIR: str = os.environ.get("PROCESSED_DIR", "output/"),
     HF_TESTSET_REPO_V2: str = os.environ.get("HF_TESTSET_REPO_V2", ""),
     OPENAI_API_KEY: str = os.environ.get("OPENAI_API_KEY", ""),
     HF_TOKEN: str = os.environ.get("HF_TOKEN", ""),
@@ -789,10 +789,10 @@ def ragas_pipeline(
     RAGAS Golden Dataset Pipeline that generates a test dataset and knowledge graph.
     
     Args:
-        DOCS_PATH: Directory with source documents
+        RAW_DIR: Directory with source documents
         TESTSET_SIZE: Number of test samples to generate
         KG_OUTPUT_PATH: File path for the serialized knowledge graph
-        OUTPUT_DIR: Directory for output files
+        PROCESSED_DIR: Directory for output files
         HF_TESTSET_REPO_V2: HuggingFace repo name to push the dataset
         LLM_MODEL: LLM model to use for generation
         EMBEDDING_MODEL: Embedding model to use
@@ -806,14 +806,14 @@ def ragas_pipeline(
     try:
         # 1. Validate environment and input parameters
         validate_environment()
-        validate_input_parameters(DOCS_PATH, TESTSET_SIZE, KG_OUTPUT_PATH, OUTPUT_DIR)
+        validate_input_parameters(RAW_DIR, TESTSET_SIZE, KG_OUTPUT_PATH, PROCESSED_DIR)
 
         # 2. Record flow parameters
         params_table = [
-            ["DOCS_PATH", DOCS_PATH],
+            ["RAW_DIR", RAW_DIR],
             ["TESTSET_SIZE", TESTSET_SIZE],
             ["KG_OUTPUT_PATH", KG_OUTPUT_PATH],
-            ["OUTPUT_DIR", OUTPUT_DIR],
+            ["PROCESSED_DIR", PROCESSED_DIR],
             ["HF_TESTSET_REPO_V2", HF_TESTSET_REPO_V2 or "Not specified"],
             ["LLM_MODEL", LLM_MODEL],
             ["EMBEDDING_MODEL", EMBEDDING_MODEL],
@@ -829,12 +829,12 @@ def ragas_pipeline(
 
         # 3. Submit PDF download task if needed (concurrent execution with other setup)
         docs_path_future = None
-        if not any(Path(DOCS_PATH).glob("*.pdf")):
-            docs_path_future = download_pdfs.submit(DOCS_PATH)
-            logger.info(f"Submitting task to download PDFs to {DOCS_PATH}")
+        if not any(Path(RAW_DIR).glob("*.pdf")):
+            docs_path_future = download_pdfs.submit(RAW_DIR)
+            logger.info(f"Submitting task to download PDFs to {RAW_DIR}")
         else:
-            logger.info(f"Using existing PDFs in {DOCS_PATH}")
-            docs_path = DOCS_PATH
+            logger.info(f"Using existing PDFs in {RAW_DIR}")
+            docs_path = RAW_DIR
 
         # 4. Resolve PDF path (wait for download if it was running)
         if docs_path_future:
@@ -856,7 +856,7 @@ def ragas_pipeline(
             return {"status": "failed", "reason": "No documents loaded"}
             
         # 7. Submit document saving task in parallel with other tasks
-        save_future = save_documents.submit(docs, OUTPUT_DIR)
+        save_future = save_documents.submit(docs, PROCESSED_DIR)
 
         # 8. Submit testset generation task
         dataset_future = build_testset.submit(
