@@ -1,0 +1,4 @@
+retriever_type,success_rate,avg_latency_ms,precision,recall,f1,mrr,ndcg,ragas_llmcontextrecall,ragas_faithfulness,ragas_factualcorrectness,ragas_responserelevancy,ragas_contextentityrecall,ragas_noisesensitivity
+bm25,1.0,0.07274150848388672,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0
+dense,1.0,200.35924911499023,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0
+hybrid,1.0,100.4502534866333,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0

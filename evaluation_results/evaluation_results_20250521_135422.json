@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-05-21T13:54:22.102602",
+  "retrievers": {
+    "naive": {
+      "retriever_type": "naive",
+      "status": "error",
+      "query_count": 0,
+      "successful_queries": 0,
+      "failed_queries": 0,
+      "execution_time_s": 0,
+      "metrics": {}
+    },
+    "bm25": {
+      "retriever_type": "bm25",
+      "status": "error",
+      "query_count": 0,
+      "successful_queries": 0,
+      "failed_queries": 0,
+      "execution_time_s": 0,
+      "metrics": {}
+    },
+    "contextual-compression": {
+      "retriever_type": "contextual-compression",
+      "status": "error",
+      "query_count": 0,
+      "successful_queries": 0,
+      "failed_queries": 0,
+      "execution_time_s": 0,
+      "metrics": {}
+    },
+    "ensemble": {
+      "retriever_type": "ensemble",
+      "status": "error",
+      "query_count": 0,
+      "successful_queries": 0,
+      "failed_queries": 0,
+      "execution_time_s": 0,
+      "metrics": {}
+    },
+    "self-query": {
+      "retriever_type": "self-query",
+      "status": "error",
+      "query_count": 0,
+      "successful_queries": 0,
+      "failed_queries": 0,
+      "execution_time_s": 0,
+      "metrics": {}
+    }
+  }
+}

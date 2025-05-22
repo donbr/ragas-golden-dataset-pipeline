@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "13-advanced-retrieval"
 version = "0.1.0"
@@ -43,4 +47,17 @@ dependencies = [
     "pymupdf",
     "arxiv",
     "bs4",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/your-username/ragas-evaluation-pipeline"
+"Bug Tracker" = "https://github.com/your-username/ragas-evaluation-pipeline/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest",
+    "pytest-cov",
 ]

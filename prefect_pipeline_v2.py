@@ -573,7 +573,7 @@ def save_documents(
     description="Builds a RAGAS testset and knowledge graph",
     retries=2, 
     retry_delay_seconds=30, 
-    cache_policy=NO_CACHE,
+    # cache_policy=NO_CACHE,
     tags=["ragas", "generation"]
 )
 def build_testset(

@@ -389,6 +389,11 @@ chmod +x tests/test_api_endpoints.sh
 ./tests/test_api_endpoints.sh
 ```
 
+```bash
+# Windows Powershell
+.\tests\test_api_endpoints.ps1
+```
+
 This script sends predefined questions to each endpoint and logs the HTTP status codes and responses to a timestamped file in the `logs/` directory (e.g., `logs/api_test_results_YYYYMMDD_HHMMSS.log`) and also prints to console.
 *   Look for `Status Code: 200` for each request.
 *   Examine the responses to ensure they are sensible. Review the log file in `logs/` for a complete record.

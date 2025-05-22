@@ -1,0 +1,22 @@
+{
+  "retriever_type": "semantic",
+  "timestamp": "2025-05-21T19:05:44.678960",
+  "metrics": {
+    "retriever_type": "semantic",
+    "success_rate": 100.0,
+    "avg_latency_ms": 1687.2785091400146,
+    "avg_document_count": 5.0,
+    "avg_document_score": 0.9,
+    "avg_token_count": 259.8,
+    "retriever_info": {
+      "type": "semantic",
+      "top_k": 5,
+      "api_url": "http://localhost:8000",
+      "description": "Pure semantic search optimized for meaning rather than keywords",
+      "strength": "High recall for semantically related content",
+      "weakness": "May miss exact matches, slower than lexical search",
+      "best_for": "Open-ended questions, conceptual exploration"
+    },
+    "ragas_available": true
+  }
+}

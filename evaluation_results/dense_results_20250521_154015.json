@@ -1,0 +1,22 @@
+{
+  "retriever_type": "dense",
+  "timestamp": "2025-05-21T15:40:15.893420",
+  "metrics": {
+    "retriever_type": "dense",
+    "success_rate": 100.0,
+    "avg_latency_ms": 200.4591464996338,
+    "avg_document_count": 5.0,
+    "avg_document_score": 0.7256269739966053,
+    "avg_token_count": 67.7,
+    "retriever_info": {
+      "type": "dense",
+      "top_k": 5,
+      "api_url": "http://localhost:8000",
+      "description": "Neural embedding-based semantic search using dense vectors",
+      "strength": "Good semantic understanding, can find relevant content without exact matches",
+      "weakness": "More computationally expensive, requires training or pre-trained models",
+      "best_for": "Complex questions, conceptual similarity, handling paraphrases"
+    },
+    "ragas_available": true
+  }
+}

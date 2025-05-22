@@ -1,0 +1,18 @@
+{
+  "retriever_type": "contextual_compression",
+  "timestamp": "2025-05-21T18:58:23.828726",
+  "metrics": {
+    "retriever_type": "contextual_compression",
+    "success_rate": 100.0,
+    "avg_latency_ms": 2332.0656299591064,
+    "avg_document_count": 3.0,
+    "avg_document_score": 2.998818934166667e-05,
+    "avg_token_count": 162.2,
+    "retriever_info": {
+      "type": "contextual_compression",
+      "top_k": 5,
+      "api_url": "http://localhost:8000"
+    },
+    "ragas_available": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "retriever_type": "naive",
+  "timestamp": "2025-05-21T18:58:20.753828",
+  "metrics": {
+    "retriever_type": "naive",
+    "success_rate": 100.0,
+    "avg_latency_ms": 1816.930913925171,
+    "avg_document_count": 5.0,
+    "avg_document_score": 0.9,
+    "avg_token_count": 537.5,
+    "retriever_info": {
+      "type": "naive",
+      "top_k": 5,
+      "api_url": "http://localhost:8000"
+    },
+    "ragas_available": true
+  }
+}

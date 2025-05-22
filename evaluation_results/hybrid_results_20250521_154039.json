@@ -1,0 +1,22 @@
+{
+  "retriever_type": "hybrid",
+  "timestamp": "2025-05-21T15:40:39.011720",
+  "metrics": {
+    "retriever_type": "hybrid",
+    "success_rate": 100.0,
+    "avg_latency_ms": 100.49645900726318,
+    "avg_document_count": 4.7,
+    "avg_document_score": 0.4616961866173841,
+    "avg_token_count": 61.5,
+    "retriever_info": {
+      "type": "hybrid",
+      "top_k": 5,
+      "api_url": "http://localhost:8000",
+      "description": "Combined approach using both lexical and semantic matching",
+      "strength": "Leverages benefits of both BM25 and dense retrieval",
+      "weakness": "More complex, potentially higher latency",
+      "best_for": "General-purpose retrieval with both keyword and semantic components"
+    },
+    "ragas_available": true
+  }
+}

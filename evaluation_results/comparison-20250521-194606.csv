@@ -1,0 +1,4 @@
+retriever_type,success_rate,avg_latency_ms,precision,recall,f1,mrr,ndcg
+naive,0.0,0,0,0,0,0,0
+bm25,0.0,0,0,0,0,0,0
+semantic,0.0,0,0,0,0,0,0

@@ -1,0 +1,4 @@
+retriever_type,success_rate,avg_latency_ms,precision,recall,f1,mrr,ndcg
+bm25,100.0,0.06787776947021484,0,0,0,0,0
+dense,100.0,200.4591464996338,0,0,0,0,0
+hybrid,100.0,100.49645900726318,0,0,0,0,0

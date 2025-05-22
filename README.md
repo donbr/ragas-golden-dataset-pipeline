@@ -1,289 +1,380 @@
-# RAGAS Golden Dataset Pipeline
+# RAGAS Golden Dataset Evaluation Pipeline
 
-A comprehensive toolkit for generating high-quality Retrieval-Augmented Generation (RAG) evaluation datasets using Prefect v3 workflows. This pipeline automates the creation of test datasets with the RAGAS framework, producing valuable resources for benchmarking and evaluating RAG systems.
-
-## Table of Contents
-
-- [RAGAS Golden Dataset Pipeline](#ragas-golden-dataset-pipeline)
-  - [Table of Contents](#table-of-contents)
-  - [Quick Start](#quick-start)
-  - [Overview](#overview)
-    - [Example Datasets](#example-datasets)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Basic Configuration](#basic-configuration)
-  - [Directory Structure](#directory-structure)
-  - [Basic Usage](#basic-usage)
-  - [Pipeline Architecture](#pipeline-architecture)
-    - [System Architecture](#system-architecture)
-    - [Data Flow](#data-flow)
-  - [Documentation](#documentation)
-  - [Troubleshooting](#troubleshooting)
-    - [Common Issues](#common-issues)
-  - [Related Resources](#related-resources)
-    - [Generated Datasets](#generated-datasets)
-
----
-
-## Quick Start
-
-For experienced users who want to get started quickly:
-
-```bash
-# Clone, setup and run
-git clone https://github.com/your-username/ragas-golden-dataset-pipeline.git
-cd ragas-golden-dataset-pipeline
-python -m venv .venv && source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -r requirements.txt  # Faster installation with uv (or use pip)
-cp .env-example .env  # Edit with your OPENAI_API_KEY
-
-# Start Prefect server and run the pipeline
-prefect server start  # In a separate terminal
-python prefect_pipeline.py
-```
-
-The pipeline will download sample PDFs if none exist, generate a 10-sample RAGAS testset, and output to the output/ directory.
-
----
+A modular, extensible pipeline for evaluating RAG (Retrieval Augmented Generation) retriever systems using Prefect for orchestration.
 
 ## Overview
 
-The RAGAS Golden Dataset Pipeline is designed to automate the generation of RAG evaluation datasets using the RAGAS framework. It processes documents from various sources (PDFs, arXiv papers, web content) and creates structured test datasets with knowledge graphs that can be used to evaluate and benchmark RAG systems.
+This pipeline enables systematic evaluation of different retrieval strategies against test datasets. It provides features for:
 
-Key features include:
+- Evaluating multiple retriever implementations
+- Calculating relevant performance metrics
+- Generating comparative reports and visualizations
+- Storing results as Prefect artifacts and local files
+- Generating and using RAGAS TestSets for comprehensive evaluation
 
-- **Multiple Pipeline Variants**: Choose from three specialized Prefect v3 flows
-- **Comprehensive Error Handling**: Robust error detection and recovery mechanisms
-- **Concurrent Task Execution**: Parallel processing for improved performance
-- **Rich Artifacts**: Detailed outputs for monitoring and debugging
-- **Hugging Face Integration**: Push generated datasets to HF Hub
-- **LangSmith Tracing**: Monitor LLM interactions
+The architecture emphasizes modularity, allowing selective execution of pipeline components.
 
-### Example Datasets
+## Architecture
 
-The pipeline has been used to generate the following datasets:
+The pipeline consists of these key components:
 
-- [RAGAS Golden Dataset](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset) - Dataset generated with the main pipeline
-- [RAGAS Golden Dataset V2](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-v2) - Enhanced dataset from the V2 pipeline
-- [RAGAS Golden Dataset Documents](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-documents) - Document collection from the document loader pipeline
+- **Evaluation Core**: Environment validation and global configuration
+- **Evaluation Data**: Test dataset loading and management
+- **Evaluation Retrieval**: API server management and retriever evaluation
+- **Evaluation Results**: Results storage, reporting, and visualization
 
----
-
-## Prerequisites
-
-- Python 3.8 or newer
-- Prefect v3
-- OpenAI API key
-- The following Python libraries:
-  - ragas (0.2.15+)
-  - prefect (3.4.1+)
-  - langchain and related packages
-  - openai
-  - pypdf
-  - huggingface_hub
-  - Other utilities (see `requirements.txt`)
-- A LangSmith account and API key (optional, for tracing)
-- A Hugging Face account and [API token](https://huggingface.co/settings/tokens) (if pushing to HF Hub)
-
----
+```
+libs/
+├── evaluation_core/         # Core functionality
+│   ├── __init__.py
+│   └── config.py            # Global configuration
+├── evaluation_data/         # Data management
+│   ├── __init__.py
+│   └── loaders.py           # Dataset loading
+├── evaluation_retrieval/    # Retrieval evaluation
+│   ├── __init__.py
+│   ├── api.py               # API server management
+│   └── metrics.py           # Metrics calculation
+└── evaluation_results/      # Results handling
+    ├── __init__.py
+    ├── storage.py           # Results storage
+    └── reporting.py         # Report generation
+pipeline.py                  # Main orchestration flow
+run.py                       # Example API server for testing
+prefect_pipeline_v2.py       # TestSet generation pipeline
+```
 
 ## Installation
 
+1. Clone the repository:
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/ragas-golden-dataset-pipeline.git
+git clone https://github.com/yourusername/ragas-golden-dataset-pipeline.git
 cd ragas-golden-dataset-pipeline
-
-# Create and activate a virtual environment
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On macOS/Linux:
-source .venv/bin/activate
-
-# Install dependencies using uv (recommended for faster installation)
-uv pip install -r requirements.txt
-# Or using pip if uv is not installed
-# pip install -r requirements.txt
-
-# Create a .env file from the example
-cp .env-example .env
-# Edit .env with your API keys and configuration
 ```
 
----
-
-## Basic Configuration
-
-The essential configuration is done through environment variables in a `.env` file:
-
-```
-# Required
-OPENAI_API_KEY=sk-xxx...
-
-# Optional but recommended
-LLM_MODEL=gpt-4.1-mini
-EMBEDDING_MODEL=text-embedding-3-small
-TESTSET_SIZE=10
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
-For a complete list of configurable options, see [CONFIGURATION.md](./docs/CONFIGURATION.md).
+## Usage
 
----
+### Basic Usage
 
-## Directory Structure
-
-```
-├── data/                       # Input documents directory
-├── output/                     # Generated artifacts and results
-├── utilities/                  # Helper scripts and analysis tools
-├── prefect_pipeline.py         # Main pipeline implementation
-├── prefect_pipeline_v2.py      # Enhanced pipeline with extended features
-├── prefect_docloader_pipeline.py # Specialized document loader pipeline
-├── requirements.txt            # Project dependencies with versions
-├── .env-example                # Template for environment configuration
-└── docs/                       # Detailed documentation
-    ├── CONFIGURATION.md        # Complete configuration options
-    ├── PIPELINES.md            # Detailed pipeline information
-    ├── VISUALIZATION.md        # Knowledge graph visualization guide
-    └── README_KG_UTIL.md       # Instructions for knowledge graph utilities
-```
-
----
-
-## Basic Usage
-
-**Important**: A Prefect server must be running before executing the pipeline:
+Run the evaluation pipeline with default settings:
 
 ```bash
-# Start the Prefect server in a separate terminal
-prefect server start
+python pipeline.py naive bm25 contextual_compression multi_query parent_document ensemble semantic --test_dataset_path data/test_questions.json
 ```
 
-This starts a server at `http://127.0.0.1:4200` with a web UI.
+### Command Line Arguments
 
-Then, run one of the pipelines with default parameters:
+- **positional arguments**: List of retriever types to evaluate
+- `--test_dataset_path`: Path to local test dataset file (JSON)
+- `--hf_dataset_repo`: HuggingFace dataset repository path
+- `--dataset_size_limit`: Maximum number of examples to evaluate (0 for all)
+- `--api_port`: Port for the API server
+- `--output_dir`: Directory to store evaluation results
+- `--llm_model`: Model to use for RAGAS evaluation metrics
+- `--disable_components`: Components to disable (e.g., validation api_server)
+- `--no_visualizations`: Disable visualizations in the report
+
+### Dataset Format
+
+The expected dataset format is:
+
+```json
+{
+  "examples": [
+    {
+      "question": "What is RAG?",
+      "context": ["Document about RAG architecture", "Another relevant document"],
+      "answer": "RAG stands for Retrieval Augmented Generation..."
+    },
+    ...
+  ]
+}
+```
+
+## TestSet Generation and Evaluation Workflow
+
+The pipeline supports a complete workflow from test dataset generation to evaluation:
+
+### 1. Generate a Test Dataset with RAGAS
+
+Use the TestSet generation pipeline to create a synthetic evaluation dataset:
 
 ```bash
-# Main Pipeline
-python prefect_pipeline.py
-
-# V2 Pipeline
-python prefect_pipeline_v2.py
-
-# Document Loader Pipeline
-python prefect_docloader_pipeline.py
+python prefect_pipeline_v2.py --raw_dir data/raw --testset_size 20 --kg_output_path output/kg.json --processed_dir output/
 ```
 
-For detailed usage instructions, command-line arguments, and advanced features, see [PIPELINES.md](./docs/PIPELINES.md).
+This will:
+- Load documents from the specified directory
+- Generate a knowledge graph and test questions
+- Save the test dataset to disk
 
----
+#### Behind the Scenes: How RAGAS TestSet Generation Works
 
-## Pipeline Architecture
+RAGAS generates test datasets using a knowledge graph-based approach:
 
-The following diagrams illustrate the architecture and data flow of the RAGAS Golden Dataset Pipeline:
+1. **Knowledge Graph Creation**: Documents are processed to extract entities, relationships, and key information.
+   ```python
+   # Initialize knowledge graph
+   from ragas.testset.graph import KnowledgeGraph
+   kg = KnowledgeGraph()
+   
+   # Add documents to knowledge graph and apply transforms
+   from ragas.testset.transforms import default_transforms, apply_transforms
+   transforms = default_transforms(documents=docs, llm=llm, embedding_model=embedding_model)
+   apply_transforms(kg, transforms)
+   ```
 
-### System Architecture
+2. **Query Distribution**: RAGAS generates different types of queries based on a distribution:
+   ```python
+   # Default query distribution
+   from ragas.testset.synthesizers import default_query_distribution
+   query_distribution = default_query_distribution(llm)
+   # Includes single-hop specific (50%), multi-hop abstract (25%), and multi-hop specific (25%)
+   ```
 
-```mermaid
-graph TD
-    subgraph Input
-        A[PDF Documents] --> B[Document Loader]
-        C[arXiv Papers] --> B
-        D[Web Content] --> B
-    end
-    
-    subgraph "Prefect Flows"
-        B --> E[Main Pipeline]
-        B --> F[V2 Pipeline]
-        B --> G[DocLoader Pipeline]
-    end
-    
-    subgraph Processing
-        E --> H[RAGAS Processor]
-        F --> H
-        H --> I[Knowledge Graph Generator]
-    end
-    
-    subgraph Output
-        I --> J[Test Dataset]
-        I --> K[Knowledge Graph]
-        J --> L[HuggingFace Hub]
-        K --> M[Visualization]
-    end
-    
-    subgraph Monitoring
-        E -.-> N[LangSmith Tracing]
-        F -.-> N
-        G -.-> N
-    end
+3. **TestSet Generation**: The generator uses the knowledge graph to create realistic questions, contexts, and answers:
+   ```python
+   from ragas.testset import TestsetGenerator
+   from ragas.llms import LangchainLLMWrapper
+   from ragas.embeddings import LangchainEmbeddingsWrapper
+   
+   # Initialize generator with LangChain components
+   generator = TestsetGenerator(
+       llm=LangchainLLMWrapper(llm_model),
+       embedding_model=LangchainEmbeddingsWrapper(embedding_model)
+   )
+   
+   # Generate testset
+   testset = generator.generate_with_langchain_docs(docs, testset_size=20)
+   ```
+
+### 2. Use the Generated TestSet for Evaluation
+
+The generated test dataset can be used directly with the evaluation pipeline:
+
+```bash
+python pipeline.py naive bm25 contextual_compression --test_dataset_path output/testset.json
 ```
 
-### Data Flow
+### 3. End-to-End Workflow Example
 
-```mermaid
-flowchart LR
-    A[Input Documents] --> B[Document Loading]
-    B --> C[Chunking & Preparation]
-    C --> E[Knowledge Graph Construction]
-    E --> F[Dataset Creation]
-    F --> G1[JSON Output]
-    F --> G2[HuggingFace Push]
-    E --> H1[KG Visualization]
-    E --> H2[KG Analysis]
-    
-    classDef process fill:#f9f,stroke:#333,stroke-width:2px
-    classDef data fill:#bbf,stroke:#333,stroke-width:2px
-    classDef output fill:#bfb,stroke:#333,stroke-width:2px
-    
-    class B,C,D,E,F process
-    class A,G1,G2,H1,H2 data
-    class G1,G2,H1,H2 output
+Here's a complete workflow example:
+
+```bash
+# Step 1: Generate TestSet
+python prefect_pipeline_v2.py --raw_dir data/pdfs --testset_size 25 --kg_output_path output/kg.json --processed_dir output/
+
+# Step 2: Evaluate retrievers using the generated TestSet
+python pipeline.py naive bm25 contextual_compression multi_query --test_dataset_path output/testset.json
 ```
 
----
+The generated TestSet includes various question types:
+- Single-hop specific questions (factual)
+- Single-hop abstract questions (conceptual)
+- Multi-hop specific questions (requiring multiple facts)
+- Multi-hop abstract questions (requiring synthesis across documents)
 
-## Documentation
+This diverse question set provides a more comprehensive evaluation of retriever capabilities.
 
-- [CONFIGURATION.md](./docs/CONFIGURATION.md) - Detailed configuration options and environment variables
-- [PIPELINES.md](./docs/PIPELINES.md) - Comprehensive guide to the available pipelines, their features, and usage
-- [VISUALIZATION.md](./docs/VISUALIZATION.md) - Instructions for visualizing knowledge graphs and analyzing results
-- [README_KG_UTIL.md](./utilities/README_KG_UTIL.md) - Guide to utilities for working with knowledge graphs
+### 4. Using a HuggingFace-Hosted TestSet
 
----
+If you've pushed your TestSet to HuggingFace:
 
-## Troubleshooting
+```bash
+python pipeline.py naive bm25 semantic --hf_dataset_repo dwb2023/ragas-golden-dataset-v2
+```
 
-### Common Issues
+### 5. Customizing TestSet Generation
 
-1. **Prefect Server Connection Issues**:
-   - Ensure the Prefect server is running with `prefect server start`
-   - Verify connection with `prefect config view`
-   - Check that `PREFECT_API_URL` is correctly set
+You can customize the TestSet generation process:
 
-2. **No PDFs in Data Directory**:
-   - The pipeline will download sample research papers if no PDFs are present
-   - Ensure your internet connection is active
+#### Choosing Different LLM and Embedding Models
 
-3. **API Key Issues**:
-   - Verify your OpenAI API key is valid and has sufficient credits
-   - Check that environment variables are correctly set in `.env`
+```python
+# OpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
 
-For more troubleshooting tips, see [PIPELINES.md](./docs/PIPELINES.md#troubleshooting).
+generator_llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4o"))
+generator_embeddings = LangchainEmbeddingsWrapper(OpenAIEmbeddings(model="text-embedding-3-small"))
 
----
+# Azure OpenAI
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+generator_llm = LangchainLLMWrapper(AzureChatOpenAI(
+    azure_deployment="your-deployment-name",
+    model="your-model-name"
+))
 
-## Related Resources
+# Any LangChain-supported LLM
+generator_llm = LangchainLLMWrapper(your_llm_instance)
+```
 
-- [RAGAS Documentation](https://docs.ragas.io/)
-- [Prefect Documentation](https://docs.prefect.io/latest/)
-- [LangChain Documentation](https://python.langchain.com/docs/)
-- [OpenAI API Documentation](https://platform.openai.com/docs/)
-- [Hugging Face Hub Documentation](https://huggingface.co/docs/hub/)
-- [arXiv API Documentation](https://arxiv.org/help/api/)
+#### Adjusting Query Distribution
 
-### Generated Datasets
+You can create a custom query distribution to focus on specific question types:
 
-- [RAGAS Golden Dataset](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset)
-- [RAGAS Golden Dataset V2](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-v2)
-- [RAGAS Golden Dataset Documents](https://huggingface.co/datasets/dwb2023/ragas-golden-dataset-documents)
+```python
+from ragas.testset.synthesizers import (
+    SingleHopSpecificQuerySynthesizer,
+    MultiHopSpecificQuerySynthesizer
+)
+
+# Custom distribution with only specific queries
+query_distribution = [
+    (SingleHopSpecificQuerySynthesizer(llm=generator_llm), 0.7),
+    (MultiHopSpecificQuerySynthesizer(llm=generator_llm), 0.3)
+]
+
+testset = generator.generate(testset_size=20, query_distribution=query_distribution)
+```
+
+### Example: Evaluating Multiple Retrievers
+
+```bash
+python pipeline.py naive bm25 contextual_compression multi_query parent_document ensemble semantic --test_dataset_path data/eval_questions.json --dataset_size_limit 100
+```
+
+### Example: Using HuggingFace Dataset
+
+```bash
+python pipeline.py naive bm25 --hf_dataset_repo huggingface/squad --dataset_size_limit 50
+```
+
+### Example: Disabling Components
+
+Run only the evaluation without starting the API server (if it's already running):
+
+```bash
+python pipeline.py bm25 --test_dataset_path data/eval_questions.json --disable_components api_server
+```
+
+## API Server
+
+The pipeline includes an example API server (`run.py`) that simulates different retriever implementations for testing purposes. You can:
+
+1. Use the included example server for testing:
+   ```bash
+   python run.py --port 8000
+   ```
+
+2. Use your own API server by disabling the API server component:
+   ```bash
+   python pipeline.py bm25 --test_dataset_path data/test_questions.json --disable_components api_server
+   ```
+   In this case, ensure your API server has compatible endpoints:
+   - `GET /health`: Health check endpoint that returns a 200 status
+   - `GET /retrievers`: Endpoint that returns a list of available retrievers
+   - `POST /retrieve/{retriever_type}`: Retrieval endpoint that accepts a query and returns documents
+
+## Converting RAGAS TestSet Format
+
+The RAGAS TestSet generator outputs data in a specific format that can be converted for evaluation:
+
+```python
+# Manual conversion example
+import json
+from ragas.testset import TestsetGenerator
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
+
+# Initialize generator
+llm = LangchainLLMWrapper(ChatOpenAI(model="gpt-4.1-mini"))
+emb = LangchainEmbeddingsWrapper(OpenAIEmbeddings(model="text-embedding-3-small"))
+generator = TestsetGenerator(llm=llm, embedding_model=emb)
+
+# Generate testset (assuming docs is a list of langchain Documents)
+testset = generator.generate_with_langchain_docs(docs, testset_size=20)
+
+# Convert to evaluation format
+eval_data = {
+    "examples": []
+}
+
+for item in testset.test_data:
+    eval_data["examples"].append({
+        "question": item.question,
+        "context": item.contexts if hasattr(item, "contexts") else [],
+        "answer": item.ground_truth if hasattr(item, "ground_truth") else ""
+    })
+
+# Save converted data
+with open("data/eval_questions.json", "w") as f:
+    json.dump(eval_data, f, indent=2)
+```
+
+The evaluation pipeline also supports direct loading of RAGAS TestSet format with automatic conversion.
+
+## Extending the Pipeline
+
+### Adding New Retrievers
+
+New retrievers should be implemented in your API server and exposed through the `/retrieve/{retriever_type}` endpoint. The retriever type is passed as a parameter to identify which implementation to use.
+
+### Adding New Metrics
+
+To add custom metrics, modify the `calculate_metrics` function in `libs/evaluation_retrieval/metrics.py`.
+
+### Adding RAGAS Metrics
+
+RAGAS metrics are automatically included if the RAGAS package is installed. Ensure you have the necessary LLM API keys configured as environment variables.
+
+## Results and Artifacts
+
+Results are stored in two formats:
+
+1. **Local Files**: JSON, CSV, and PNG files in the output directory
+2. **Prefect Artifacts**: Markdown reports, tables, and links viewable in the Prefect UI
+
+## Required Dependencies
+
+- Python 3.8+
+- prefect
+- pandas
+- matplotlib
+- requests
+- fastapi (for the example API server)
+- uvicorn (for the example API server)
+- ragas (optional, for advanced metrics)
+- datasets (optional, for HuggingFace dataset loading)
+- langchain_openai (for TestSet generation)
+
+## Serialization Pattern
+
+The pipeline uses a specific pattern to handle serialization of complex objects in Prefect tasks:
+
+1. Tasks that return complex objects use `result_serializer="json"` in their decorator to avoid pickle serialization issues
+2. Non-JSON-serializable objects (like subprocess.Popen) are converted to simple dictionaries with relevant metadata
+3. Table artifacts use the proper dictionary format with "columns" and "data" keys instead of pandas DataFrames
+4. When needed, helper functions like `get_ragas_components()` are used to recreate objects from their serialized metadata
+
+Example:
+
+```python
+@task(
+    name="my-task",
+    description="Task description",
+    result_serializer="json"  # Use JSON serializer
+)
+def my_task():
+    # Non-serializable object
+    process = subprocess.Popen(...)
+    
+    # Return only serializable metadata
+    return {
+        "pid": process.pid,
+        "status": "running"
+    }
+```
+
+This approach ensures all task results can be properly cached and persisted by Prefect.
+
+## License
+
+[MIT License](LICENSE)

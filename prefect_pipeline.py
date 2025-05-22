@@ -608,7 +608,9 @@ def initialize_ragas_generator(
     description="Generates a RAGAS testset from documents",
     retries=1,
     retry_delay_seconds=60,
-    cache_policy=NO_CACHE,
+    # cache_policy=NO_CACHE,
+    cache_key_fn=task_input_hash,
+    cache_expiration=timedelta(days=1),
     timeout_seconds=1800,  # 30 minutes
     tags=["ragas", "generation"],
     task_run_name="Generate testset with {size} samples"

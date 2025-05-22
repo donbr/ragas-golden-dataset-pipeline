@@ -1,0 +1,19 @@
+{
+  "retriever_type": "dense",
+  "timestamp": "2025-05-21T15:31:59.422154",
+  "metrics": {
+    "retriever_type": "dense",
+    "total_questions": 10,
+    "successful_retrievals": 10,
+    "success_rate": 1.0,
+    "avg_latency_ms": 200.35924911499023,
+    "avg_docs_retrieved": 5.0,
+    "ragas_available": true,
+    "ragas_llmcontextrecall": 0.0,
+    "ragas_faithfulness": 0.0,
+    "ragas_factualcorrectness": 0.0,
+    "ragas_responserelevancy": 0.0,
+    "ragas_contextentityrecall": 0.0,
+    "ragas_noisesensitivity": 0.0
+  }
+}

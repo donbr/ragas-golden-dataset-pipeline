@@ -1,0 +1,878 @@
+{
+  "timestamp": "2025-05-21T18:15:32.093058",
+  "results": [
+    {
+      "retriever_type": "bm25",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:17.146171",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 958.8134288787842,
+        "engine": "langchain-bm25-retriever",
+        "document_count": 4
+      },
+      "document_count": 4,
+      "documents": [
+        {
+          "id": "doc_0_2999",
+          "content": ": 24\nReview: John Wick: Chapter 4 is almost three hours of Keanu Reeves engaged in a gunfight, bookended with meaningless dialog-in-place-of-plot, and a lot of people being thrown down stairs. Of all the \"Wick\" movies, this is clearly the weakest one yet. Was anything added to the overall Wick-universe narrative? No. Did we see a whole lot of inconsequential people die? Yes. Did Keanu Reeves say \"yeah\" a lot? Yes.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "bm25",
+            "source": "data\\raw\\jw4.csv",
+            "row": 24,
+            "Review_Date": "3 June 2023",
+            "Review_Title": " Almost 3 hours of nothing\n",
+            "Review_Url": "/review/rw9097584/?ref_=tt_urv",
+            "Author": "Phil_H",
+            "Rating": 4,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:22.335267"
+          }
+        },
+        {
+          "id": "doc_1_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "bm25",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333599"
+          }
+        },
+        {
+          "id": "doc_2_5114",
+          "content": ": 0\nReview: The best way I can describe John Wick is to picture Taken but instead of Liam Neeson it's Keanu Reeves and instead of his daughter it's his dog. That's essentially the plot of the movie. John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "bm25",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333559"
+          }
+        },
+        {
+          "id": "doc_3_7741",
+          "content": ": 9\nReview: \"John Wick: Chapter 2\" is an American movie from this year (2017). Experienced visual effects artist Stahelski and Kolstad returned from the very first Wick film to work on the script/direction here too, so the premise with regard to people working behind the camera is there. And in front of the camera we see familiar faces again, people that survived the film, like most of all Keanu Reeves playing the central character. This is a really long film at over 2 hours and at this runtime, it is considerably longer than the first. And there is a lot other stuff different compared to the original. Most has to do with the fun component. I think the first film was a great fun watch from start to finish while offering emotion nonetheless and also delivering in the crime and drama genres. And action too, but I don't care too much about that. This genre is also basically the only one where this new movie delivers as the first 30 minutes are truly packed with action. It gets less afterward, but there is no denying that it was still all about the action and nothing else.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "bm25",
+            "source": "data\\raw\\jw2.csv",
+            "row": 9,
+            "Review_Date": "22 July 2017",
+            "Review_Title": " A disappointing sequel for the most part\n",
+            "Review_Url": "/review/rw3760991/?ref_=tt_urv",
+            "Author": "Horst_In_Translation",
+            "Rating": 4,
+            "Movie_Title": "John Wick 2",
+            "last_accessed_at": "2025-05-19T18:10:22.334020"
+          }
+        }
+      ],
+      "execution_time_ms": 963
+    },
+    {
+      "retriever_type": "dense",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:18.111446",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 925.2464771270752,
+        "engine": "langchain-dense-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_3090",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "dense",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661554",
+            "_id": "736e0e57b950463695560576144eb7b1",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_1_415",
+          "content": "This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "dense",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "56509ed75f0248839abd7d145b825973",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_2_9892",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "dense",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "6ef1623d786549428199de38f6afb8ba",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_3_8086",
+          "content": "John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "dense",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661511",
+            "_id": "ff24807576514587bec26d9d2d428bf4",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_4_5073",
+          "content": ": 14\nReview: By now you know what to expect from a John Wick movie. I thought the franchise was losing a little momentum in chapter 3 so I was worried this could be disappointing. It's not. It's even more on steroids than any Wick before! Even close to 3 hours it doesn't feel to long which is very special for a action movie. This franchise has set new standards. If anybody says a movie is good like John Wick, it better f'n be! The set pieces as everyone mentioned before are really insane this time. The Tokyo sceney with illuminated cherry blossoms was beautiful. The only super illogical thing that bothered me was that nobody flinched at the nightclub, eventually they did but after a whole 10 minute beatdown through the whole club, but then again it's a shady nightclub for high table people. If you liked the first three movies, get your ass to the cinema.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "dense",
+            "source": "data\\raw\\jw4.csv",
+            "row": 14,
+            "Review_Date": "23 March 2023",
+            "Review_Title": " Yeah\n",
+            "Review_Url": "/review/rw8946621/?ref_=tt_urv",
+            "Author": "markvanwasbeek",
+            "Rating": 9,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:21.663110",
+            "_id": "024b69cadd96484d8601f482a8f7a529",
+            "_collection_name": "JohnWickSemantic"
+          }
+        }
+      ],
+      "execution_time_ms": 929
+    },
+    {
+      "retriever_type": "hybrid",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:19.041911",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 2205.5752277374268,
+        "engine": "langchain-hybrid-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "hybrid",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333599"
+          }
+        },
+        {
+          "id": "doc_1_3514",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute. This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "hybrid",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "25293886e71349bfb0ace40398253371",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_2_5114",
+          "content": ": 0\nReview: The best way I can describe John Wick is to picture Taken but instead of Liam Neeson it's Keanu Reeves and instead of his daughter it's his dog. That's essentially the plot of the movie. John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "hybrid",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333559"
+          }
+        },
+        {
+          "id": "doc_3_5393",
+          "content": ": 19\nReview: I really don't understand the love that \"John Wick\" receives. It's just kind of a generic action thriller to me. No different than a \"Bourne\" or \"Taken\" movie. It gets a slight bump for me in a rating of 6 instead of 5 because I did think that the cinematography was really good and also the fight choreography was top notch. I can definitely see the influence of martial arts films on this.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "hybrid",
+            "source": "data\\raw\\jw1.csv",
+            "row": 19,
+            "Review_Date": "14 April 2023",
+            "Review_Title": " I Don't Get It\n",
+            "Review_Url": "/review/rw8991670/?ref_=tt_urv",
+            "Author": "xiaoli7377",
+            "Rating": 6,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661552",
+            "_id": "029549eeea1646b1b52d20103797a6f2",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_4_6361",
+          "content": ": 20\nReview: In a world where movie sequels seem to be loathed even before they are released, the 'John Wick' series has remained remarkably consistent and well received. In fact all three of the first films have the same IMDb rating of 7.4/10 and I noticed recently that I gave them all the same rating of 8/10. Incredibly, I think 'John Wick: Chapter 4' is the best the series has to offer. This movie was a wild ride.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "hybrid",
+            "source": "data\\raw\\jw4.csv",
+            "row": 20,
+            "Review_Date": "23 March 2023",
+            "Review_Title": " THIS is how you justify a 3 hour runtime\n",
+            "Review_Url": "/review/rw8946038/?ref_=tt_urv",
+            "Author": "jtindahouse",
+            "Rating": 9,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:21.663119",
+            "_id": "2e0ff7ec71c243c8b22ab836e0bed7ba",
+            "_collection_name": "JohnWickMain"
+          }
+        }
+      ],
+      "execution_time_ms": 2208
+    },
+    {
+      "retriever_type": "semantic",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:21.251105",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 794.5938110351562,
+        "engine": "langchain-semantic-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_3090",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "semantic",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661554",
+            "_id": "736e0e57b950463695560576144eb7b1",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_1_415",
+          "content": "This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "semantic",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "56509ed75f0248839abd7d145b825973",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_2_9892",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "semantic",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "6ef1623d786549428199de38f6afb8ba",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_3_8086",
+          "content": "John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "semantic",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661511",
+            "_id": "ff24807576514587bec26d9d2d428bf4",
+            "_collection_name": "JohnWickSemantic"
+          }
+        },
+        {
+          "id": "doc_4_5073",
+          "content": ": 14\nReview: By now you know what to expect from a John Wick movie. I thought the franchise was losing a little momentum in chapter 3 so I was worried this could be disappointing. It's not. It's even more on steroids than any Wick before! Even close to 3 hours it doesn't feel to long which is very special for a action movie. This franchise has set new standards. If anybody says a movie is good like John Wick, it better f'n be! The set pieces as everyone mentioned before are really insane this time. The Tokyo sceney with illuminated cherry blossoms was beautiful. The only super illogical thing that bothered me was that nobody flinched at the nightclub, eventually they did but after a whole 10 minute beatdown through the whole club, but then again it's a shady nightclub for high table people. If you liked the first three movies, get your ass to the cinema.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "semantic",
+            "source": "data\\raw\\jw4.csv",
+            "row": 14,
+            "Review_Date": "23 March 2023",
+            "Review_Title": " Yeah\n",
+            "Review_Url": "/review/rw8946621/?ref_=tt_urv",
+            "Author": "markvanwasbeek",
+            "Rating": 9,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:21.663110",
+            "_id": "024b69cadd96484d8601f482a8f7a529",
+            "_collection_name": "JohnWickSemantic"
+          }
+        }
+      ],
+      "execution_time_ms": 797
+    },
+    {
+      "retriever_type": "naive",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:22.049337",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 1243.7381744384766,
+        "engine": "langchain-naive-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_3514",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute. This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "naive",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "25293886e71349bfb0ace40398253371",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_1_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "naive",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661554",
+            "_id": "1ae69fa4857044d398d269dfa1697c36",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_2_8342",
+          "content": ": 14\nReview: By now you know what to expect from a John Wick movie. I thought the franchise was losing a little momentum in chapter 3 so I was worried this could be disappointing. It's not. It's even more on steroids than any Wick before! Even close to 3 hours it doesn't feel to long which is very special for a action movie. This franchise has set new standards. If anybody says a movie is good like John Wick, it better f'n be! The set pieces as everyone mentioned before are really insane this time. The Tokyo sceney with illuminated cherry blossoms was beautiful. The only super illogical thing that bothered me was that nobody flinched at the nightclub, eventually they did but after a whole 10 minute beatdown through the whole club, but then again it's a shady nightclub for high table people. If you liked the first three movies, get your ass to the cinema. Yeah.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "naive",
+            "source": "data\\raw\\jw4.csv",
+            "row": 14,
+            "Review_Date": "23 March 2023",
+            "Review_Title": " Yeah\n",
+            "Review_Url": "/review/rw8946621/?ref_=tt_urv",
+            "Author": "markvanwasbeek",
+            "Rating": 9,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:21.663110",
+            "_id": "99d7116b14e14d919a9eb7973bbc6f8d",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_3_5114",
+          "content": ": 0\nReview: The best way I can describe John Wick is to picture Taken but instead of Liam Neeson it's Keanu Reeves and instead of his daughter it's his dog. That's essentially the plot of the movie. John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "naive",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661511",
+            "_id": "d447ea0505b246ef955b01bff816321b",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_4_8402",
+          "content": ": 6\nReview: In 2014, a Keanu Reeves revenge thriller John Wick became a surprise hit. I originally skipped out on the film as I felt that the trailers only showed an assassin story that I felt I've seen before. As far as I'm concerned, I made a big mistake. Before seeing the sequel, I felt it was important to watch the first one. I rented it on Amazon Prime and I was shock by what I saw; a dark, stylish, and fun action movie that is doing it's own thing. Though I've seen plenty stories about revenge (The Count of Monte Cristo and Moby Dick being the prime examples), I can't recall one over someone's pet being murdered.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "naive",
+            "source": "data\\raw\\jw2.csv",
+            "row": 6,
+            "Review_Date": "14 February 2017",
+            "Review_Title": " John Wick: Chapter 2 continues it's faced paced, neo-noir story of our assassin\n",
+            "Review_Url": "/review/rw3639868/?ref_=tt_urv",
+            "Author": "RforFilm",
+            "Rating": 8,
+            "Movie_Title": "John Wick 2",
+            "last_accessed_at": "2025-05-19T18:10:21.662021",
+            "_id": "817bb1b67c354c3d8eb2441f60e55ebd",
+            "_collection_name": "JohnWickMain"
+          }
+        }
+      ],
+      "execution_time_ms": 1254
+    },
+    {
+      "retriever_type": "contextual_compression",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:23.305056",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 2758.5322856903076,
+        "engine": "langchain-contextual_compression-retriever",
+        "document_count": 3
+      },
+      "document_count": 3,
+      "documents": [
+        {
+          "id": "doc_0_3514",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute. This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.9778412,
+          "metadata": {
+            "retriever": "contextual_compression",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "25293886e71349bfb0ace40398253371",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_1_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 0.9688562,
+          "metadata": {
+            "retriever": "contextual_compression",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661554",
+            "_id": "1ae69fa4857044d398d269dfa1697c36",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_2_5393",
+          "content": ": 19\nReview: I really don't understand the love that \"John Wick\" receives. It's just kind of a generic action thriller to me. No different than a \"Bourne\" or \"Taken\" movie. It gets a slight bump for me in a rating of 6 instead of 5 because I did think that the cinematography was really good and also the fight choreography was top notch. I can definitely see the influence of martial arts films on this.",
+          "score": 0.9672869,
+          "metadata": {
+            "retriever": "contextual_compression",
+            "source": "data\\raw\\jw1.csv",
+            "row": 19,
+            "Review_Date": "14 April 2023",
+            "Review_Title": " I Don't Get It\n",
+            "Review_Url": "/review/rw8991670/?ref_=tt_urv",
+            "Author": "xiaoli7377",
+            "Rating": 6,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661552",
+            "_id": "029549eeea1646b1b52d20103797a6f2",
+            "_collection_name": "JohnWickMain"
+          }
+        }
+      ],
+      "execution_time_ms": 2762
+    },
+    {
+      "retriever_type": "multi_query",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:26.067842",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 2723.4067916870117,
+        "engine": "langchain-multi_query-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "multi_query",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661554",
+            "_id": "1ae69fa4857044d398d269dfa1697c36",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_1_3514",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute. This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "multi_query",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "25293886e71349bfb0ace40398253371",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_2_5114",
+          "content": ": 0\nReview: The best way I can describe John Wick is to picture Taken but instead of Liam Neeson it's Keanu Reeves and instead of his daughter it's his dog. That's essentially the plot of the movie. John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "multi_query",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661511",
+            "_id": "d447ea0505b246ef955b01bff816321b",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_3_4779",
+          "content": ": 0\nReview: No doubt about it, \"John Wick: Chapter 2\" is a slick action thriller, but man, oh man, how can any one person absorb that kind of punishment? John (Keanu Reeves) gets shot, stabbed and hit by cars multiple times and postures a limp now and then to indicate he might have gotten just a little bit hurt. Besides that, he almost never makes a wrong move when hunted by dozens of assassins all at the same time. Okay, I get it, Reeves is the star of the picture and has to come out on top, but I'd like a little more credibility put into these kinds of stories. But I guess that's the whole point, suspend your disbelief for a couple of hours and just go with all of the over the top action the film makers can put together.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "multi_query",
+            "source": "data\\raw\\jw2.csv",
+            "row": 0,
+            "Review_Date": "14 September 2018",
+            "Review_Title": " \"No one gets out and comes back without repercussions.\"\n",
+            "Review_Url": "/review/rw4338449/?ref_=tt_urv",
+            "Author": "classicsoncall",
+            "Rating": 7,
+            "Movie_Title": "John Wick 2",
+            "last_accessed_at": "2025-05-19T18:10:21.662007",
+            "_id": "587f47af77234fc8bafba2f1d5ad675c",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_4_5393",
+          "content": ": 19\nReview: I really don't understand the love that \"John Wick\" receives. It's just kind of a generic action thriller to me. No different than a \"Bourne\" or \"Taken\" movie. It gets a slight bump for me in a rating of 6 instead of 5 because I did think that the cinematography was really good and also the fight choreography was top notch. I can definitely see the influence of martial arts films on this.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "multi_query",
+            "source": "data\\raw\\jw1.csv",
+            "row": 19,
+            "Review_Date": "14 April 2023",
+            "Review_Title": " I Don't Get It\n",
+            "Review_Url": "/review/rw8991670/?ref_=tt_urv",
+            "Author": "xiaoli7377",
+            "Rating": 6,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661552",
+            "_id": "029549eeea1646b1b52d20103797a6f2",
+            "_collection_name": "JohnWickMain"
+          }
+        }
+      ],
+      "execution_time_ms": 2726
+    },
+    {
+      "retriever_type": "parent_document",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:28.795216",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 1504.1279792785645,
+        "engine": "langchain-parent_document-retriever",
+        "document_count": 1
+      },
+      "document_count": 1,
+      "documents": [
+        {
+          "id": "doc_0_510",
+          "content": ": 22\nReview: HORRIBLE movie. I love John Wick. I mean I wouldn't pay to see one, but I love the series none the less. Even liked the third one even though the ending blew baby chunks. All the 10s and 9s scores are so damn fake it's hilarious. IMDB is a joke. Someone needs to start a real movie database and weed out the fake high scores, it's as ridiculous as John Wick 4. He walks away from every major injury or collision or building fall. Then he passes away from flesh wounds. What nonsense. The whole plot is nonsense. The fights scene are so boring. I got up to make a sandwich twice. Just the typical 100 judo throws and same shots to head. Numerous coup de grace's. I feel sorry for anyone who paid for this nonsense.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "parent_document",
+            "source": "data\\raw\\jw4.csv",
+            "row": 22,
+            "Review_Date": "25 March 2023",
+            "Review_Title": " Horrible\n",
+            "Review_Url": "/review/rw8949493/?ref_=tt_urv",
+            "Author": "solidabs",
+            "Rating": 1,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:22.335264"
+          }
+        }
+      ],
+      "execution_time_ms": 1507
+    },
+    {
+      "retriever_type": "ensemble",
+      "question": "Did people generally like John Wick?",
+      "timestamp": "2025-05-21T18:15:30.303173",
+      "status": "SUCCESS",
+      "error": null,
+      "metadata": {
+        "top_k": 5,
+        "latency_ms": 1785.1428985595703,
+        "engine": "langchain-ensemble-retriever",
+        "document_count": 5
+      },
+      "document_count": 5,
+      "documents": [
+        {
+          "id": "doc_0_2425",
+          "content": ": 20\nReview: John Wick is something special. It takes as much time setting up elaborate action sequences as it does the world with which it all takes place in. And what a world it is. It reminds me of Millers Crossing and it is cooler than any other recent attempt at noir. We are shown a criminal underworld where, if you are connected, many powerful people know who you are and show you respect. John Wick was connected but he got out. He is the rare killer who has found peace, and he is grateful for that peace. Some young kids steal that from him and he does what he does best, he wages a one man war against the Russian Mafia. It might sound like the film takes quite a leap but it all makes sense. The motives of John and the people who get in the way of his bullets are all very clear, even if it does come across as rather simple. That's the plot at it's most basic. Then there's the action. The film is directed by Reeve's stuntman from The Matrix, so this guy knows action. There are sequences that flow so smoothly it puts other action films and their quick cuts to shame. Keaunu moves so fluidly throughout the film and comes across as such a natural that the only disappointment is that we have not seen him like this before. Along the way are plenty of character actors, fans of The Matrix and The Wire will recognize a few people then there are more obvious ones like Ian McShane and Willem Dafoe. Everyone seems to be having a good time. That is another plus for this movie. It get's dark at times but overall it is quite fun, not very chipper, but fun. I cannot recommend this movie enough. I believe it is a must see for action fans and for anyone looking for something a bit different from the usual fare.",
+          "score": 1.0,
+          "metadata": {
+            "retriever": "ensemble",
+            "source": "data\\raw\\jw1.csv",
+            "row": 20,
+            "Review_Date": "22 October 2014",
+            "Review_Title": " Smoothest action film to come around in a long time\n",
+            "Review_Url": "/review/rw3109271/?ref_=tt_urv",
+            "Author": "IceSkateUpHill",
+            "Rating": 10,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333599"
+          }
+        },
+        {
+          "id": "doc_1_3514",
+          "content": ": 9\nReview: At first glance, John Wick sounds like a terrible film on paper but with the slickness of Keanu Reeves' performance as the titular character and the sheer brilliance in its action sequences, this marks the best action film of the year and one of the absolute best in the past decade. Following a brutal home invasion that leaves his beloved dog murdered by thugs from his past, John Wick vows revenge on the ones who have taken what he loves most. Like I said, on paper, this seems like a direct-to-DVD slopfest starring John Cena but as a film with Keanu Reeves as the lead, it marks the very welcomed return for Reeves to the genre. John Wick is insanely fun, violently brutal and an overall romp especially for those disappointed by The Expendables 3. John Wick is propelled by Tarantino-esque dialog mixed with the swagger of action stars from the 70s. Reeves literally emulates cool in this film and does it with such confidence, that we don't even doubt the character...even when he kills countless bad guys with extreme force in some utterly ridiculous and implausible situations. We don't doubt it for a minute. This is EXACTLY what you want out of an action film. It is briskly paced, brilliantly shot and meticulously choreographed and keeps you wanting more and more. The supporting cast filled with the likes of John Legiuzamo, Ian McShane, and Willen Dafoe also keeps this film very interesting. These guys don't play good guys, hell, John Wick by traditional standards would be a bad guy in any other film. Every character is more ruthless than the next and pushes John Wick to be more ruthless than they are, creating a very cool dynamic between the character and the plot regarding the idea of how far is too far? However, don't expect some revelation from John Wick regarding the morality of bad and evil. This film wants you entertained and does so with brute force, it never lets up, not even for a second. One scene in particular that will have your blood pumping is a showdown between thugs and Wick in a nightclub. This action sequence remains the best in the film and will have you grasping your theater seat because of the sheer intensity of it. Overall, John Wick is slick, violent fun that turns into a remarkable, surprising film that will catch you off guard. It is THAT good. I highly recommend this film to action buffs especially but I'm sure those who just like a good movie will love it as well.",
+          "score": 0.95,
+          "metadata": {
+            "retriever": "ensemble",
+            "source": "data\\raw\\jw1.csv",
+            "row": 9,
+            "Review_Date": "20 October 2014",
+            "Review_Title": " The coolest action film you'll see all year\n",
+            "Review_Url": "/review/rw3107759/?ref_=tt_urv",
+            "Author": "trublu215",
+            "Rating": 9,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661536",
+            "_id": "25293886e71349bfb0ace40398253371",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_2_5114",
+          "content": ": 0\nReview: The best way I can describe John Wick is to picture Taken but instead of Liam Neeson it's Keanu Reeves and instead of his daughter it's his dog. That's essentially the plot of the movie. John Wick (Reeves) is out to seek revenge on the people who took something he loved from him. It's a beautifully simple premise for an action movie - when action movies get convoluted, they get bad i.e. A Good Day to Die Hard. John Wick gives the viewers what they want: Awesome action, stylish stunts, kinetic chaos, and a relatable hero to tie it all together. John Wick succeeds in its simplicity.",
+          "score": 0.9,
+          "metadata": {
+            "retriever": "ensemble",
+            "source": "data\\raw\\jw1.csv",
+            "row": 0,
+            "Review_Date": "6 May 2015",
+            "Review_Title": " Kinetic, concise, and stylish; John Wick kicks ass.\n",
+            "Review_Url": "/review/rw3233896/?ref_=tt_urv",
+            "Author": "lnvicta",
+            "Rating": 8,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:22.333559"
+          }
+        },
+        {
+          "id": "doc_3_5393",
+          "content": ": 19\nReview: I really don't understand the love that \"John Wick\" receives. It's just kind of a generic action thriller to me. No different than a \"Bourne\" or \"Taken\" movie. It gets a slight bump for me in a rating of 6 instead of 5 because I did think that the cinematography was really good and also the fight choreography was top notch. I can definitely see the influence of martial arts films on this.",
+          "score": 0.85,
+          "metadata": {
+            "retriever": "ensemble",
+            "source": "data\\raw\\jw1.csv",
+            "row": 19,
+            "Review_Date": "14 April 2023",
+            "Review_Title": " I Don't Get It\n",
+            "Review_Url": "/review/rw8991670/?ref_=tt_urv",
+            "Author": "xiaoli7377",
+            "Rating": 6,
+            "Movie_Title": "John Wick 1",
+            "last_accessed_at": "2025-05-18T18:10:21.661552",
+            "_id": "029549eeea1646b1b52d20103797a6f2",
+            "_collection_name": "JohnWickMain"
+          }
+        },
+        {
+          "id": "doc_4_8342",
+          "content": ": 14\nReview: By now you know what to expect from a John Wick movie. I thought the franchise was losing a little momentum in chapter 3 so I was worried this could be disappointing. It's not. It's even more on steroids than any Wick before! Even close to 3 hours it doesn't feel to long which is very special for a action movie. This franchise has set new standards. If anybody says a movie is good like John Wick, it better f'n be! The set pieces as everyone mentioned before are really insane this time. The Tokyo sceney with illuminated cherry blossoms was beautiful. The only super illogical thing that bothered me was that nobody flinched at the nightclub, eventually they did but after a whole 10 minute beatdown through the whole club, but then again it's a shady nightclub for high table people. If you liked the first three movies, get your ass to the cinema. Yeah.",
+          "score": 0.8,
+          "metadata": {
+            "retriever": "ensemble",
+            "source": "data\\raw\\jw4.csv",
+            "row": 14,
+            "Review_Date": "23 March 2023",
+            "Review_Title": " Yeah\n",
+            "Review_Url": "/review/rw8946621/?ref_=tt_urv",
+            "Author": "markvanwasbeek",
+            "Rating": 9,
+            "Movie_Title": "John Wick 4",
+            "last_accessed_at": "2025-05-21T18:10:21.663110",
+            "_id": "99d7116b14e14d919a9eb7973bbc6f8d",
+            "_collection_name": "JohnWickMain"
+          }
+        }
+      ],
+      "execution_time_ms": 1788
+    }
+  ],
+  "summary": {
+    "total_retrievers": 9,
+    "successful_retrievers": [
+      "bm25",
+      "dense",
+      "hybrid",
+      "semantic",
+      "naive",
+      "contextual_compression",
+      "multi_query",
+      "parent_document",
+      "ensemble"
+    ],
+    "failed_retrievers": [],
+    "empty_document_retrievers": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "retriever_type": "parent_document",
+  "timestamp": "2025-05-21T19:03:58.896662",
+  "metrics": {
+    "retriever_type": "parent_document",
+    "success_rate": 100.0,
+    "avg_latency_ms": 1607.2806119918823,
+    "avg_document_count": 1.9,
+    "avg_document_score": 0.9710526315789473,
+    "avg_token_count": 431.7,
+    "retriever_info": {
+      "type": "parent_document",
+      "top_k": 5,
+      "api_url": "http://localhost:8000"
+    },
+    "ragas_available": true
+  }
+}

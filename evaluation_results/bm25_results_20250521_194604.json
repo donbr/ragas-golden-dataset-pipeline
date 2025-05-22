@@ -1,0 +1,22 @@
+{
+  "retriever_type": "bm25",
+  "timestamp": "2025-05-21T19:46:04.539530",
+  "metrics": {
+    "retriever_type": "bm25",
+    "success_rate": 0.0,
+    "avg_latency_ms": 0,
+    "avg_document_count": 0,
+    "avg_document_score": 0,
+    "avg_token_count": 0,
+    "retriever_info": {
+      "type": "bm25",
+      "top_k": 5,
+      "api_url": "http://localhost:8000",
+      "description": "Traditional lexical search using BM25 algorithm",
+      "strength": "Good for exact keyword matching, fast, no training required",
+      "weakness": "Doesn't understand semantics, sensitive to vocabulary mismatch",
+      "best_for": "Precise keyword queries, straightforward information retrieval"
+    },
+    "ragas_available": true
+  }
+}

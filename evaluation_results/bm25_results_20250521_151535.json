@@ -1,0 +1,16 @@
+{
+  "retriever_type": "bm25",
+  "timestamp": "2025-05-21T15:15:35.867712",
+  "metrics": {
+    "retriever_type": "bm25",
+    "total_questions": 10,
+    "successful_retrievals": 10,
+    "success_rate": 1.0,
+    "avg_latency_ms": 0.09794235229492188,
+    "avg_docs_retrieved": 4.2,
+    "ragas_available": true,
+    "ragas_llm_context_recall": 0.0,
+    "ragas_faithfulness": 0.0,
+    "ragas_answer_relevancy": 0.0
+  }
+}
