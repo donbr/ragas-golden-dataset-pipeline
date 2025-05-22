@@ -311,6 +311,16 @@ with open("data/eval_questions.json", "w") as f:
 
 The evaluation pipeline also supports direct loading of RAGAS TestSet format with automatic conversion.
 
+## References
+
+### RAGAS Documentation
+- [RAGAS TestSet Generation Guide](https://docs.ragas.io/en/stable/getstarted/rag_testset_generation/) - Comprehensive guide to generating TestSets for RAG evaluation
+- [Single-Hop TestSet Generation](https://docs.ragas.io/en/stable/howtos/applications/singlehop_testset_gen/#testset-generation) - Guide to generating TestSets for single-hop queries
+- [LangChain Integration](https://docs.ragas.io/en/stable/howtos/integrations/langchain/) - Documentation on using RAGAS with LangChain
+
+### LangChain Resources
+- [LangChain Document Transformers](https://github.com/langchain-ai/langchain/tree/master/docs/docs/integrations/document_transformers) - Documentation on document transformers in LangChain
+
 ## Extending the Pipeline
 
 ### Adding New Retrievers
@@ -324,6 +334,62 @@ To add custom metrics, modify the `calculate_metrics` function in `libs/evaluati
 ### Adding RAGAS Metrics
 
 RAGAS metrics are automatically included if the RAGAS package is installed. Ensure you have the necessary LLM API keys configured as environment variables.
+
+## RAGAS Metrics Integration
+
+The evaluation pipeline incorporates [RAGAS](https://docs.ragas.io/) metrics for comprehensive retrieval evaluation. These metrics provide deeper insights into retriever performance beyond traditional IR metrics.
+
+### Available RAGAS Metrics
+
+The pipeline supports these key RAGAS metrics:
+
+- **LLMContextRecall**: Evaluates how well retrieved contexts align with expected information needs
+- **Faithfulness**: Assesses whether retrieved information is accurate and reliable
+- **FactualCorrectness**: Checks if retrieved content is factually correct compared to references
+- **ResponseRelevancy**: Measures how relevant the retrievals are to the query
+- **ContextEntityRecall**: Evaluates whether important entities are captured in retrieval results
+- **NoiseSensitivity**: Tests retriever robustness against query variations and noise
+
+### Implementing RAGAS Evaluation
+
+The evaluation pipeline creates a RAGAS `EvaluationDataset` from retriever results:
+
+```python
+# Example from our implementation
+dataset_items = []
+for result in detailed_results:
+    # Get question and retrieved contexts
+    question = result.get("question", "")
+    retrieved_contexts = [doc.get("content", "") for doc in result.get("documents", [])]
+    
+    dataset_items.append({
+        "user_input": question,
+        "retrieved_contexts": retrieved_contexts,
+        "response": "",  # Would contain response if using a QA system
+        "reference": ""  # Would contain ground truth if available
+    })
+
+# Create RAGAS evaluation dataset
+evaluation_dataset = EvaluationDataset.from_list(dataset_items)
+
+# Apply RAGAS metrics
+result = evaluate(
+    dataset=evaluation_dataset,
+    metrics=[LLMContextRecall(), Faithfulness(), FactualCorrectness()],
+    llm=evaluator_llm,
+)
+```
+
+### Viewing RAGAS Results in Prefect
+
+The evaluation results are displayed in Prefect as artifacts, making it easy to compare different retrievers:
+
+1. Run the pipeline with RAGAS enabled
+2. Open the Prefect UI
+3. Navigate to the flow run
+4. Check the artifacts tab to see detailed RAGAS metrics
+
+For more details on RAGAS metrics, see the [RAGAS documentation](https://docs.ragas.io/en/stable/concepts/metrics/).
 
 ## Results and Artifacts
 

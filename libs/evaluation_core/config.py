@@ -9,23 +9,20 @@ from typing import Dict, Any, List, Optional
 from datetime import timedelta
 from prefect import task, get_run_logger
 from prefect.tasks import task_input_hash
+from prefect.artifacts import create_markdown_artifact
 
-# RAGAS imports with proper guards
-try:
-    from ragas import evaluate, RunConfig
-    from ragas.llms import LangchainLLMWrapper
-    from langchain_openai import ChatOpenAI
-    from ragas.metrics import (
-        LLMContextRecall,
-        Faithfulness,
-        FactualCorrectness,
-        ResponseRelevancy,
-        ContextEntityRecall,
-        NoiseSensitivity,
-    )
-    RAGAS_AVAILABLE = True
-except ImportError:
-    RAGAS_AVAILABLE = False
+# Direct RAGAS imports without guards
+from ragas import evaluate, RunConfig
+from ragas.llms import LangchainLLMWrapper
+from langchain_openai import ChatOpenAI
+from ragas.metrics import (
+    LLMContextRecall,
+    Faithfulness,
+    FactualCorrectness,
+    ResponseRelevancy,
+    ContextEntityRecall,
+    NoiseSensitivity,
+)
 
 
 @task(
@@ -42,7 +39,7 @@ def setup_global_evaluation_config(
     timeout: int = 300,
     max_retries: int = 15,
     max_wait: int = 90,
-    max_workers: int = 8,
+    max_workers: int = 8,  # Match best practice guide: 8 concurrent API calls
 ) -> Dict[str, Any]:
     """
     Sets up global evaluation configuration for RAGAS.
@@ -60,17 +57,7 @@ def setup_global_evaluation_config(
     """
     logger = get_run_logger()
     
-    if not RAGAS_AVAILABLE:
-        logger.warning("RAGAS not available. Install ragas package to enable evaluation features.")
-        return {
-            "status": "unavailable",
-            "message": "RAGAS not installed. Install with: pip install ragas"
-        }
-    
     logger.info(f"Setting up global evaluation configuration with model: {llm_model}")
-    
-    # We still create the objects but don't return them directly
-    # Instead, we'll recreate them when needed using the settings
     
     # Configure standard metrics for evaluation
     metric_names = [
@@ -83,6 +70,27 @@ def setup_global_evaluation_config(
     ]
     
     logger.info(f"Configured {len(metric_names)} RAGAS metrics with {max_workers} workers")
+    
+    # Create an artifact showing the RAGAS metrics configuration
+    create_markdown_artifact(
+        key="ragas-metrics-config",
+        markdown=f"""# RAGAS Metrics Configuration
+
+## Model
+- LLM: `{llm_model}`
+
+## Runtime Configuration
+- Timeout: {timeout}s
+- Max Retries: {max_retries}
+- Max Wait: {max_wait}s
+- Max Workers: {max_workers}
+- Log Retries: True
+
+## Configured Metrics
+{chr(10).join(['- ' + metric for metric in metric_names])}
+""",
+        description="RAGAS metrics configuration"
+    )
     
     # Return only serializable metadata
     return {
@@ -111,15 +119,12 @@ def get_ragas_components(config: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Dictionary with actual RAGAS components
     """
-    if not RAGAS_AVAILABLE or config.get("status") != "available":
-        return config
-    
     settings = config.get("settings", {})
     llm_model = settings.get("llm_model", "gpt-4.1-mini")
     timeout = settings.get("timeout", 300)
     max_retries = settings.get("max_retries", 15)
     max_wait = settings.get("max_wait", 90)
-    max_workers = settings.get("max_workers", 8)
+    max_workers = settings.get("max_workers", 8)  # Use 8 workers by default to match best practice guide
     
     # Configure evaluation LLM
     evaluator_llm = LangchainLLMWrapper(ChatOpenAI(model=llm_model))
@@ -129,7 +134,7 @@ def get_ragas_components(config: Dict[str, Any]) -> Dict[str, Any]:
         timeout=timeout,
         max_retries=max_retries,
         max_wait=max_wait,
-        max_workers=max_workers,
+        max_workers=max_workers,  # Use the configured max_workers value
         log_tenacity=True
     )
     

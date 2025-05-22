@@ -30,6 +30,7 @@ ENV/
 # Project specific
 data/*
 output/*
+evaluation_results/
 !data/.gitkeep
 !output/.gitkeep
 *.log
