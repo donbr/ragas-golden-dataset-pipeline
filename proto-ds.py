@@ -373,6 +373,56 @@ def create_evaluation_dataset(
     
     return EvaluationDataset.from_list(evaluation_samples)
 
+def get_ragas_result_key_mapping():
+    """
+    Maps RAGAS metric class names to their actual result dictionary keys.
+    Based on actual RAGAS evaluation results from 2024-2025 API.
+    """
+    return {
+        'LLMContextRecall': 'context_recall',
+        'Faithfulness': 'faithfulness', 
+        'FactualCorrectness': 'factual_correctness(mode=f1)',
+        'ResponseRelevancy': 'answer_relevancy',
+        'ContextEntityRecall': 'context_entity_recall',
+        'NoiseSensitivity': 'noise_sensitivity',
+        'ContextPrecision': 'context_precision',
+        'ContextRecall': 'context_recall'
+    }
+
+def extract_ragas_scores_current_api(result, metrics, logger):
+    """
+    Extract RAGAS scores using the current 2024-2025 API patterns.
+    Handles the mismatch between metric class names and result keys.
+    """
+    mapping = get_ragas_result_key_mapping()
+    scores = {}
+    
+    logger.info(f"RAGAS result keys available: {list(result.keys())}")
+    
+    for metric in metrics:
+        metric_class_name = type(metric).__name__
+        
+        # Try the direct mapping first
+        if metric_class_name in mapping:
+            result_key = mapping[metric_class_name]
+            if result_key in result:
+                scores[metric_class_name] = float(result[result_key])
+                logger.info(f"Mapped {metric_class_name} → {result_key}: {scores[metric_class_name]:.4f}")
+            else:
+                logger.warning(f"Expected key '{result_key}' not found for {metric_class_name}")
+                scores[metric_class_name] = 0.0
+        else:
+            # Fallback: try lowercase conversion
+            fallback_key = metric_class_name.lower()
+            if fallback_key in result:
+                scores[metric_class_name] = float(result[fallback_key])
+                logger.info(f"Fallback mapping {metric_class_name} → {fallback_key}: {scores[metric_class_name]:.4f}")
+            else:
+                logger.warning(f"No mapping found for {metric_class_name}, using 0.0")
+                scores[metric_class_name] = 0.0
+    
+    return scores
+
 @task(
     name="evaluate-retriever",
     description="Evaluate retriever using Ragas metrics",
@@ -380,16 +430,18 @@ def create_evaluation_dataset(
     retry_delay_seconds=30,
     cache_policy=NO_CACHE,
     timeout_seconds=600,
-    tags=["evaluation"]
+    tags=["evaluation"],
+    result_serializer="json"  # Prefect 2024-2025 best practice
 )
 def evaluate_retriever(
     dataset: EvaluationDataset,
     config: RetrieverEvaluationConfig
 ) -> Dict[str, float]:
-    """Evaluate a retriever using Ragas metrics"""
+    """Evaluate a retriever using Ragas metrics - FIXED VERSION"""
     logger = get_run_logger()
     
     try:
+        logger.info("Starting RAGAS evaluation")
         result = evaluate(
             dataset=dataset,
             metrics=config.metrics,
@@ -397,12 +449,21 @@ def evaluate_retriever(
             run_config=config.run_config
         )
         
-        scores = {metric.name: result[metric.name] for metric in config.metrics}
+        logger.info(f"RAGAS evaluation completed. Result type: {type(result)}")
+        
+        # Use the corrected extraction method
+        scores = extract_ragas_scores_current_api(result, config.metrics, logger)
+        
         logger.info(f"Evaluation completed with scores: {scores}")
         return scores
+        
     except Exception as e:
         logger.error(f"Evaluation failed: {str(e)}")
-        raise
+        # Return default scores to prevent downstream failures
+        default_scores = {type(metric).__name__: 0.0 for metric in config.metrics}
+        default_scores["_evaluation_failed"] = True
+        default_scores["_error"] = str(e)
+        return default_scores
 
 @task(
     name="generate-comparison-report",

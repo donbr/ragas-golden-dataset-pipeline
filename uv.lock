@@ -5,7 +5,7 @@ requires-python = ">=3.13"
 [[package]]
 name = "13-advanced-retrieval"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "arxiv" },
     { name = "bs4" },
